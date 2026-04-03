@@ -317,7 +317,9 @@ async function apiFetch(params) {
     const action = params.action;
     let url = `${API_URL}?action=${action}`;
     if (action === 'save') {
-      url += `&trade=${encodeURIComponent(JSON.stringify(params.trade))}`;
+      // 圖片不上傳到 Sheets，只傳文字欄位
+      const { img0, img1, img2, ...textOnly } = params.trade;
+      url += `&trade=${encodeURIComponent(JSON.stringify(textOnly))}`;
     } else if (action === 'delete') {
       url += `&id=${encodeURIComponent(params.id)}`;
     }

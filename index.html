@@ -605,7 +605,12 @@ function closeModal() { document.getElementById('modal').classList.remove('open'
 
 function triggerUpload(i) { document.getElementById('f-img-' + i).click(); }
 
-function resetSlots() { [0, 1, 2].forEach(function(i) { renderSlot(i, null); }); }
+function resetSlots() {
+  [0, 1, 2].forEach(function(i) {
+    renderSlot(i, null);
+    document.getElementById('f-img-' + i).value = '';
+  });
+}
 
 function renderSlot(i, src) {
   var slot = document.getElementById('slot-' + i);
@@ -616,7 +621,13 @@ function renderSlot(i, src) {
   }
 }
 
-function removeImg(e, i) { e.stopPropagation(); imgData[i] = null; renderSlot(i, null); }
+function removeImg(e, i) {
+  e.stopPropagation();
+  imgData[i] = null;
+  renderSlot(i, null);
+  // 清空 file input，這樣才能重新選同一張圖
+  document.getElementById('f-img-' + i).value = '';
+}
 
 function previewImg(e, i) {
   var file = e.target.files[0];

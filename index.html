@@ -142,7 +142,7 @@ svg.equity-chart { width: 100%; height: 120px; }
 </div>
 
 <!-- Modal -->
-<div class="modal-overlay" id="modal">
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title" id="modal-title">新增交易</span>
@@ -314,10 +314,13 @@ function loadTrades() {
 
 function parseTrades(arr) {
   return arr.map(function(t) {
+    // 修正日期格式，只取 yyyy-MM-dd 部分
+    var date = t.date ? String(t.date).split('T')[0] : '';
     return Object.assign({}, t, {
       entry: +t.entry||null, exit: +t.exit||null,
       size: +t.size||null, fee: +t.fee||0.05,
-      sl: +t.sl||null, tp: +t.tp||null
+      sl: +t.sl||null, tp: +t.tp||null,
+      date: date
     });
   });
 }

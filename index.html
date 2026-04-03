@@ -280,18 +280,16 @@ function uploadImgToDrive(base64DataUrl, slot, cb) {
 function apiFetch(params, cb) {
   if (!API_URL) { cb(null); return; }
   var action = params.action;
-  var url = API_URL + '?action=' + action;
   if (action === 'save') {
-    var textOnly = {};
-    var skipKeys = ['img0','img0Id','img1','img1Id','img2','img2Id'];
-    for (var key in params.trade) {
-      if (skipKeys.indexOf(key) === -1) textOnly[key] = params.trade[key];
-    }
-    url += '&trade=' + encodeURIComponent(JSON.stringify(textOnly));
+    // 圖片 URL 很短（不是 base64），可以直接存進 Sheets
+    var url = API_URL + '?action=save&trade=' + encodeURIComponent(JSON.stringify(params.trade));
+    fetch(url).then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
   } else if (action === 'delete') {
-    url += '&id=' + encodeURIComponent(params.id);
+    var url = API_URL + '?action=delete&id=' + encodeURIComponent(params.id);
+    fetch(url).then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
+  } else {
+    cb(null);
   }
-  fetch(url).then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
 }
 
 function apiGet(cb) {

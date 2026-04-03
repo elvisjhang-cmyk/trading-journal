@@ -317,8 +317,12 @@ async function apiFetch(params) {
     const action = params.action;
     let url = `${API_URL}?action=${action}`;
     if (action === 'save') {
-      // 圖片不上傳到 Sheets，只傳文字欄位
-      const { img0, img1, img2, ...textOnly } = params.trade;
+      // 明確移除圖片欄位，只傳文字資料
+      const textOnly = {};
+      const skipKeys = ['img0','img1','img2'];
+      for (const key in params.trade) {
+        if (!skipKeys.includes(key)) textOnly[key] = params.trade[key];
+      }
       url += `&trade=${encodeURIComponent(JSON.stringify(textOnly))}`;
     } else if (action === 'delete') {
       url += `&id=${encodeURIComponent(params.id)}`;

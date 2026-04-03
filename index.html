@@ -741,18 +741,19 @@ async function saveTrade() {
 async function deleteTrade() {
   if(!editingId||!confirm('確定刪除這筆紀錄？')) return;
   const idToDelete = editingId;
+
+  // 立刻更新畫面，不等 API
   trades = trades.filter(t => t.id != idToDelete);
-  // 先關 modal、更新畫面
+  localStorage.setItem('trades', JSON.stringify(trades));
   closeModal();
   renderAll();
-  // 同步刪除到 Sheets 並更新 localStorage
+
+  // 背景靜默同步，不阻塞 UI
   if(API_URL) {
-    setSyncStatus('syncing');
-    const res = await apiFetch({action:'delete', id: idToDelete});
-    setSyncStatus(res&&res.ok ? 'ok' : 'error');
+    apiFetch({action:'delete', id: idToDelete}).then(res => {
+      setSyncStatus(res && res.ok ? 'ok' : 'error');
+    });
   }
-  // 不管有沒有雲端，本機也要刪乾淨
-  localStorage.setItem('trades', JSON.stringify(trades));
 }
 
 function saveCapital() {

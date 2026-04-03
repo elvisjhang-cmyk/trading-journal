@@ -346,7 +346,13 @@ function parseTrades(arr) {
 }
 
 function setSyncStatus(s) {
-  const map = { ok:'🟢 已同步 Google Sheets', syncing:'🔄 同步中...', error:'🔴 連線失敗，顯示本機', local:'⚪ 本機模式（未設定雲端）' };
+  const now = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const map = {
+    ok:`🟢 已同步 Google Sheets　${now}`,
+    syncing:'🔄 同步中...',
+    error:'🔴 連線失敗，顯示本機',
+    local:'⚪ 本機模式（未設定雲端）'
+  };
   document.getElementById('sync-status').textContent = map[s]||s;
 }
 
@@ -727,10 +733,19 @@ async function saveTrade() {
 
 async function deleteTrade() {
   if(!editingId||!confirm('確定刪除這筆紀錄？')) return;
-  trades=trades.filter(t=>t.id!=editingId);
+  const idToDelete = editingId;
+  trades = trades.filter(t => t.id != idToDelete);
+  // 先關 modal、更新畫面
+  closeModal();
+  renderAll();
+  // 同步刪除到 Sheets 並更新 localStorage
+  if(API_URL) {
+    setSyncStatus('syncing');
+    const res = await apiFetch({action:'delete', id: idToDelete});
+    setSyncStatus(res&&res.ok ? 'ok' : 'error');
+  }
+  // 不管有沒有雲端，本機也要刪乾淨
   localStorage.setItem('trades', JSON.stringify(trades));
-  if(API_URL) await apiFetch({action:'delete',id:editingId});
-  closeModal(); renderAll();
 }
 
 function saveCapital() {

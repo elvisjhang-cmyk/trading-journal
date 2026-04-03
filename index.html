@@ -87,6 +87,10 @@ svg.equity-chart { width: 100%; height: 120px; }
 .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; color: #fff; font-weight: 500; min-width: 2px; }
 .bar-fill.profit { background: #16a34a; }
 .bar-fill.loss { background: #dc2626; }
+.img-lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; align-items: center; justify-content: center; cursor: zoom-out; }
+.img-lightbox.open { display: flex; }
+.img-lightbox img { max-width: 95vw; max-height: 90vh; object-fit: contain; border-radius: 8px; }
+.img-lightbox-label { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 13px; background: rgba(0,0,0,0.5); padding: 4px 12px; border-radius: 20px; }
 </style>
 </head>
 <body>
@@ -137,6 +141,12 @@ svg.equity-chart { width: 100%; height: 120px; }
       <div id="conn-result" style="margin-top:10px;font-size:13px;"></div>
     </div>
   </div>
+</div>
+
+<!-- Lightbox -->
+<div class="img-lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="">
+  <div class="img-lightbox-label" id="lightbox-label"></div>
 </div>
 
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
@@ -288,6 +298,16 @@ function apiFetch(params, cb) {
 function apiGet(cb) {
   if (!API_URL) { cb(null); return; }
   fetch(API_URL + '?action=getAll').then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
+}
+
+function openLightbox(src, label) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-label').textContent = label || '';
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
 }
 
 function loadTrades() {
@@ -462,7 +482,7 @@ function renderList() {
       '<div class="imgs-row">' +
       imgs.map(function(img, i) {
         return '<div class="img-slot"><div class="img-slot-label">' + IMG_LABELS[i] + '</div>' +
-          (img ? '<img src="' + img + '">' : '<div class="img-slot-empty">' + IMG_ICONS[i] + '</div>') + '</div>';
+          (img ? '<img src="' + img + '" style="cursor:zoom-in" onclick="event.stopPropagation();openLightbox(\'' + img + '\',\'' + IMG_LABELS[i] + '\')">' : '<div class="img-slot-empty">' + IMG_ICONS[i] + '</div>') + '</div>';
       }).join('') + '</div>' : '';
     return '<div class="trade-card" onclick="openModal(\'' + t.id + '\')">' +
       '<div class="trade-header"><div>' +

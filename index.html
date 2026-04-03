@@ -14,7 +14,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .tab { padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid #ddd; background: #fff; color: #666; }
 .tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
 .content { padding: 16px 20px; max-width: 800px; margin: 0 auto; }
-
 .capital-card { background: #1a1a1a; color: #fff; border-radius: 16px; padding: 20px; margin-bottom: 16px; }
 .capital-row { display: flex; justify-content: space-between; align-items: flex-end; }
 .capital-label { font-size: 11px; color: #aaa; margin-bottom: 4px; }
@@ -24,14 +23,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .capital-pct.profit { background: #16a34a; }
 .capital-pct.loss { background: #dc2626; }
 .capital-pct.zero { background: #444; }
-
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
 .stat-card { background: #fff; border-radius: 12px; padding: 14px; border: 0.5px solid #e8e8e8; }
 .stat-label { font-size: 11px; color: #999; margin-bottom: 4px; }
 .stat-value { font-size: 18px; font-weight: 500; }
 .stat-value.profit { color: #16a34a; }
 .stat-value.loss { color: #dc2626; }
-
 .add-btn { width: 100%; padding: 12px; background: #1a1a1a; color: #fff; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; margin-bottom: 16px; }
 .trade-card { background: #fff; border-radius: 12px; padding: 16px; border: 0.5px solid #e8e8e8; margin-bottom: 12px; cursor: pointer; transition: opacity .15s; }
 .trade-card:active { opacity: 0.7; }
@@ -43,21 +40,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .badge-long { background: #dcfce7; color: #166534; }
 .badge-short { background: #fee2e2; color: #991b1b; }
 .badge-market { background: #e0f2fe; color: #075985; }
-
-/* PnL compare row */
-.pnl-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-.pnl-box { background: #f9f9f9; border-radius: 8px; padding: 10px 12px; }
-.pnl-box-label { font-size: 10px; color: #999; margin-bottom: 3px; }
-.pnl-box-val { font-size: 15px; font-weight: 500; }
-.pnl-box-sub { font-size: 11px; color: #bbb; margin-top: 2px; }
-
-/* Images row */
-.imgs-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
-.img-slot { position: relative; }
-.img-slot-label { font-size: 10px; color: #999; margin-bottom: 3px; text-align: center; }
-.img-slot img { width: 100%; border-radius: 6px; aspect-ratio: 4/3; object-fit: cover; display: block; }
-.img-slot-empty { width: 100%; aspect-ratio: 4/3; border-radius: 6px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; overflow-y: auto; }
 .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; }
 .modal { background: #fff; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; }
@@ -71,21 +53,15 @@ input, select, textarea { width: 100%; padding: 10px 12px; border: 0.5px solid #
 textarea { resize: vertical; min-height: 80px; font-family: inherit; }
 input:focus, select:focus, textarea:focus { outline: none; border-color: #999; }
 .section-title { font-size: 13px; font-weight: 500; color: #666; margin: 20px 0 12px; padding-top: 16px; border-top: 0.5px solid #f0f0f0; }
-
-/* Upload grid */
 .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.upload-slot { border: 1.5px dashed #ddd; border-radius: 10px; padding: 10px 6px; text-align: center; cursor: pointer; color: #999; font-size: 11px; line-height: 1.4; transition: border-color .2s; }
-.upload-slot:hover { border-color: #aaa; }
+.upload-slot { border: 1.5px dashed #ddd; border-radius: 10px; padding: 10px 6px; text-align: center; cursor: pointer; color: #999; font-size: 11px; line-height: 1.4; }
 .upload-slot .slot-icon { font-size: 20px; margin-bottom: 4px; }
 .upload-slot img { width: 100%; border-radius: 6px; aspect-ratio: 4/3; object-fit: cover; display: block; margin-bottom: 4px; }
 .upload-slot .remove-img { font-size: 10px; color: #dc2626; margin-top: 2px; }
-
-/* PnL preview */
 .pnl-preview-box { background: #f5f5f5; border-radius: 10px; padding: 12px; margin-bottom: 16px; }
 .pnl-preview-box .preview-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .pnl-preview-box .preview-label { font-size: 12px; color: #999; }
 .pnl-preview-box .preview-val { font-size: 14px; font-weight: 500; }
-
 .save-btn { width: 100%; padding: 13px; background: #1a1a1a; color: #fff; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; margin-top: 8px; }
 .save-btn:disabled { background: #999; cursor: not-allowed; }
 .delete-btn { width: 100%; padding: 13px; background: #fff; color: #dc2626; border: 0.5px solid #dc2626; border-radius: 12px; font-size: 15px; cursor: pointer; margin-top: 8px; }
@@ -93,11 +69,19 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: #999; }
 .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .note-preview { font-size: 12px; color: #888; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .loading { text-align: center; padding: 40px; color: #999; font-size: 14px; }
-
+.pnl-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.pnl-box { background: #f9f9f9; border-radius: 8px; padding: 10px 12px; }
+.pnl-box-label { font-size: 10px; color: #999; margin-bottom: 3px; }
+.pnl-box-val { font-size: 15px; font-weight: 500; }
+.pnl-box-sub { font-size: 11px; color: #bbb; margin-top: 2px; }
+.imgs-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+.img-slot .img-slot-label { font-size: 10px; color: #999; margin-bottom: 3px; text-align: center; }
+.img-slot img { width: 100%; border-radius: 6px; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.img-slot-empty { width: 100%; aspect-ratio: 4/3; border-radius: 6px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 .equity-wrap { background: #fff; border-radius: 12px; padding: 16px; border: 0.5px solid #e8e8e8; margin-bottom: 16px; }
 .equity-title { font-size: 13px; font-weight: 500; color: #666; margin-bottom: 12px; }
 svg.equity-chart { width: 100%; height: 120px; }
-.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .bar-label { width: 90px; text-align: right; color: #666; flex-shrink: 0; font-size: 12px; }
 .bar-track { flex: 1; background: #f0f0f0; border-radius: 4px; height: 22px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; color: #fff; font-weight: 500; min-width: 2px; }
@@ -126,9 +110,7 @@ svg.equity-chart { width: 100%; height: 120px; }
     <button class="add-btn" onclick="openModal()">＋ 新增交易紀錄</button>
     <div id="trades-list"><div class="loading">載入中...</div></div>
   </div>
-
   <div id="stats-view" style="display:none"><div id="stats-content"></div></div>
-
   <div id="setup-view" style="display:none">
     <div class="trade-card" style="margin-bottom:12px">
       <div class="trade-symbol" style="margin-bottom:12px">💰 初始本金設定</div>
@@ -164,11 +146,9 @@ svg.equity-chart { width: 100%; height: 120px; }
       <span class="modal-title" id="modal-title">新增交易</span>
       <button class="close-btn" onclick="closeModal()">✕</button>
     </div>
-
-    <!-- 基本資訊 -->
     <div class="form-group">
       <label>幣種 / 股票代號</label>
-      <input type="text" id="f-symbol" placeholder="例：BTC/USDT、ETH/USDT、AAPL">
+      <input type="text" id="f-symbol" placeholder="例：BTC/USDT、ETH/USDT">
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -189,7 +169,6 @@ svg.equity-chart { width: 100%; height: 120px; }
         </select>
       </div>
     </div>
-
     <div class="section-title">進出場</div>
     <div class="form-row">
       <div class="form-group">
@@ -198,12 +177,12 @@ svg.equity-chart { width: 100%; height: 120px; }
       </div>
       <div class="form-group">
         <label>出場價格 (USDT)</label>
-        <input type="number" id="f-exit" placeholder="0（未平倉可留空）" step="any">
+        <input type="number" id="f-exit" placeholder="0" step="any">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>倉位金額（USDT）</label>
+        <label>倉位金額 (USDT)</label>
         <input type="number" id="f-size" placeholder="例：3000" step="any">
       </div>
       <div class="form-group">
@@ -211,7 +190,6 @@ svg.equity-chart { width: 100%; height: 120px; }
         <input type="number" id="f-fee" placeholder="0.05" step="0.001" value="0.05">
       </div>
     </div>
-
     <div class="section-title">計畫止損 / 止盈</div>
     <div class="form-row">
       <div class="form-group">
@@ -223,39 +201,18 @@ svg.equity-chart { width: 100%; height: 120px; }
         <input type="number" id="f-tp" placeholder="0" step="any">
       </div>
     </div>
-
-    <!-- 即時預覽 -->
     <div id="pnl-preview" style="display:none">
       <div class="pnl-preview-box">
-        <div class="preview-row">
-          <span class="preview-label">實際損益（出場後）</span>
-          <span class="preview-val" id="prev-actual">-</span>
-        </div>
-        <div class="preview-row">
-          <span class="preview-label">佔本金</span>
-          <span class="preview-val" id="prev-actual-pct" style="font-size:12px;color:#999">-</span>
-        </div>
+        <div class="preview-row"><span class="preview-label">實際損益</span><span class="preview-val" id="prev-actual">-</span></div>
+        <div class="preview-row"><span class="preview-label">佔本金</span><span class="preview-val" id="prev-actual-pct" style="font-size:12px;color:#999">-</span></div>
         <div style="border-top:0.5px solid #e8e8e8;margin:8px 0"></div>
-        <div class="preview-row">
-          <span class="preview-label">預期損益（止盈）</span>
-          <span class="preview-val" id="prev-tp">-</span>
-        </div>
-        <div class="preview-row">
-          <span class="preview-label">最大風險（止損）</span>
-          <span class="preview-val" id="prev-sl">-</span>
-        </div>
-        <div class="preview-row">
-          <span class="preview-label">預期 RR</span>
-          <span class="preview-val" id="prev-rr">-</span>
-        </div>
+        <div class="preview-row"><span class="preview-label">預期損益（止盈）</span><span class="preview-val" id="prev-tp">-</span></div>
+        <div class="preview-row"><span class="preview-label">最大風險（止損）</span><span class="preview-val" id="prev-sl">-</span></div>
+        <div class="preview-row"><span class="preview-label">預期 RR</span><span class="preview-val" id="prev-rr">-</span></div>
         <div style="border-top:0.5px solid #e8e8e8;margin:8px 0"></div>
-        <div class="preview-row">
-          <span class="preview-label">手續費</span>
-          <span class="preview-val" id="prev-fee" style="font-size:12px;color:#f59e0b">-</span>
-        </div>
+        <div class="preview-row"><span class="preview-label">手續費</span><span class="preview-val" id="prev-fee" style="color:#f59e0b">-</span></div>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label>進出場方式</label>
@@ -272,26 +229,15 @@ svg.equity-chart { width: 100%; height: 120px; }
         <input type="date" id="f-date">
       </div>
     </div>
-
     <div class="section-title">截圖</div>
     <div class="upload-grid">
-      <div class="upload-slot" onclick="triggerUpload(0)" id="slot-0">
-        <div class="slot-icon">📋</div>
-        <div>入場理由</div>
-      </div>
-      <div class="upload-slot" onclick="triggerUpload(1)" id="slot-1">
-        <div class="slot-icon">📈</div>
-        <div>開單截圖</div>
-      </div>
-      <div class="upload-slot" onclick="triggerUpload(2)" id="slot-2">
-        <div class="slot-icon">📉</div>
-        <div>關單截圖</div>
-      </div>
+      <div class="upload-slot" onclick="triggerUpload(0)" id="slot-0"><div class="slot-icon">📋</div><div>入場理由</div></div>
+      <div class="upload-slot" onclick="triggerUpload(1)" id="slot-1"><div class="slot-icon">📈</div><div>開單截圖</div></div>
+      <div class="upload-slot" onclick="triggerUpload(2)" id="slot-2"><div class="slot-icon">📉</div><div>關單截圖</div></div>
     </div>
     <input type="file" id="f-img-0" accept="image/*" style="display:none" onchange="previewImg(event,0)">
     <input type="file" id="f-img-1" accept="image/*" style="display:none" onchange="previewImg(event,1)">
     <input type="file" id="f-img-2" accept="image/*" style="display:none" onchange="previewImg(event,2)">
-
     <div class="form-group" style="margin-top:16px">
       <label>心得筆記</label>
       <textarea id="f-note" placeholder="這筆交易的想法、錯誤、改進點..."></textarea>
@@ -302,476 +248,331 @@ svg.equity-chart { width: 100%; height: 120px; }
 </div>
 
 <script>
-let trades = [];
-let editingId = null;
-let imgData = [null, null, null];
-let API_URL = localStorage.getItem('api_url') || '';
-let INIT_CAPITAL = parseFloat(localStorage.getItem('init_capital')) || 0;
-const IMG_LABELS = ['入場理由','開單截圖','關單截圖'];
-const IMG_ICONS = ['📋','📈','📉'];
+var trades = [];
+var editingId = null;
+var imgData = [null, null, null];
+var API_URL = localStorage.getItem('api_url') || '';
+var INIT_CAPITAL = parseFloat(localStorage.getItem('init_capital')) || 0;
+var IMG_LABELS = ['入場理由','開單截圖','關單截圖'];
+var IMG_ICONS = ['📋','📈','📉'];
 
 // === 上傳圖片到 Google Drive ===
-async function uploadImgToDrive(base64DataUrl, slot) {
-  if (!API_URL || !base64DataUrl) return null;
-  try {
-    // 拆出 mimeType 和 base64
-    const match = base64DataUrl.match(/^data:(.+);base64,(.+)$/);
-    if (!match) return null;
-    const mimeType = match[1];
-    const base64 = match[2];
-    const filename = `trade_${Date.now()}_${slot}.jpg`;
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'uploadImg', filename, base64, mimeType }),
-      headers: { 'Content-Type': 'text/plain' }
-    });
-    const data = await res.json();
-    return data.ok ? { url: data.url, fileId: data.fileId } : null;
-  } catch(e) { return null; }
-}
-// === API ===
-  if (!API_URL) return null;
-  try {
-    const action = params.action;
-    let url = `${API_URL}?action=${action}`;
-    if (action === 'save') {
-      // 明確移除圖片欄位，只傳文字資料
-      const textOnly = {};
-      const skipKeys = ['img0','img1','img2'];
-      for (const key in params.trade) {
-        if (!skipKeys.includes(key)) textOnly[key] = params.trade[key];
-      }
-      url += `&trade=${encodeURIComponent(JSON.stringify(textOnly))}`;
-    } else if (action === 'delete') {
-      url += `&id=${encodeURIComponent(params.id)}`;
-    }
-    const res = await fetch(url);
-    return await res.json();
-  } catch(e) { return null; }
-}
-async function apiGet() {
-  if (!API_URL) return null;
-  try { return await (await fetch(`${API_URL}?action=getAll`)).json(); } catch(e) { return null; }
+function uploadImgToDrive(base64DataUrl, slot, cb) {
+  if (!API_URL || !base64DataUrl) { cb(null); return; }
+  var match = base64DataUrl.match(/^data:(.+);base64,(.+)$/);
+  if (!match) { cb(null); return; }
+  var mimeType = match[1];
+  var base64 = match[2];
+  var filename = 'trade_' + Date.now() + '_' + slot + '.jpg';
+  fetch(API_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'uploadImg', filename: filename, base64: base64, mimeType: mimeType }),
+    headers: { 'Content-Type': 'text/plain' }
+  }).then(function(res) {
+    return res.json();
+  }).then(function(data) {
+    cb(data.ok ? { url: data.url, fileId: data.fileId } : null);
+  }).catch(function() { cb(null); });
 }
 
-async function loadTrades() {
-  setSyncStatus('syncing');
-  const data = await apiGet();
-  if (data && data.trades) {
-    const remoteTrades = parseTrades(data.trades);
-    // 從本機撈圖片，補回雲端資料
-    const localTrades = parseTrades(JSON.parse(localStorage.getItem('trades') || '[]'));
-    const localMap = {};
-    localTrades.forEach(t => localMap[t.id] = t);
-    trades = remoteTrades.map(t => {
-      const local = localMap[t.id];
-      if (local) {
-        t.img0 = local.img0 || null;
-        t.img1 = local.img1 || null;
-        t.img2 = local.img2 || null;
-      }
-      return t;
-    });
-    // 同步更新本機（保留圖片）
-    localStorage.setItem('trades', JSON.stringify(trades));
-    setSyncStatus('ok');
-  } else {
-    trades = parseTrades(JSON.parse(localStorage.getItem('trades') || '[]'));
-    setSyncStatus(API_URL ? 'error' : 'local');
+// === API ===
+function apiFetch(params, cb) {
+  if (!API_URL) { cb(null); return; }
+  var action = params.action;
+  var url = API_URL + '?action=' + action;
+  if (action === 'save') {
+    var textOnly = {};
+    var skipKeys = ['img0','img0Id','img1','img1Id','img2','img2Id'];
+    for (var key in params.trade) {
+      if (skipKeys.indexOf(key) === -1) textOnly[key] = params.trade[key];
+    }
+    url += '&trade=' + encodeURIComponent(JSON.stringify(textOnly));
+  } else if (action === 'delete') {
+    url += '&id=' + encodeURIComponent(params.id);
   }
-  renderAll();
+  fetch(url).then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
+}
+
+function apiGet(cb) {
+  if (!API_URL) { cb(null); return; }
+  fetch(API_URL + '?action=getAll').then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
+}
+
+function loadTrades() {
+  setSyncStatus('syncing');
+  apiGet(function(data) {
+    if (data && data.trades) {
+      trades = parseTrades(data.trades);
+      localStorage.setItem('trades', JSON.stringify(trades));
+      setSyncStatus('ok');
+    } else {
+      trades = parseTrades(JSON.parse(localStorage.getItem('trades') || '[]'));
+      setSyncStatus(API_URL ? 'error' : 'local');
+    }
+    renderAll();
+  });
 }
 
 function parseTrades(arr) {
-  return arr.map(t => ({
-    ...t,
-    entry: +t.entry||null, exit: +t.exit||null,
-    size: +t.size||null, fee: +t.fee||0.05,
-    sl: +t.sl||null, tp: +t.tp||null
-  }));
+  return arr.map(function(t) {
+    return Object.assign({}, t, {
+      entry: +t.entry||null, exit: +t.exit||null,
+      size: +t.size||null, fee: +t.fee||0.05,
+      sl: +t.sl||null, tp: +t.tp||null
+    });
+  });
 }
 
 function setSyncStatus(s) {
-  const now = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const map = {
-    ok:`🟢 已同步 Google Sheets　${now}`,
-    syncing:'🔄 同步中...',
-    error:'🔴 連線失敗，顯示本機',
-    local:'⚪ 本機模式（未設定雲端）'
-  };
-  document.getElementById('sync-status').textContent = map[s]||s;
+  var now = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var map = { ok:'🟢 已同步 Google Sheets　'+now, syncing:'🔄 同步中...', error:'🔴 連線失敗，顯示本機', local:'⚪ 本機模式（未設定雲端）' };
+  document.getElementById('sync-status').textContent = map[s] || s;
 }
 
 // === Calc ===
-// 倉位金額模式：size = 投入的 USDT 金額
 function feeAmt(entry, exit, size, feeRate) {
-  // 手續費 = 倉位金額 × 費率 × 2（進出場）
-  return size * (feeRate/100) * 2;
+  return size * (feeRate / 100) * 2;
 }
 function calcPnl(t) {
   if (!t.entry || !t.exit || !t.size) return null;
-  const pct = t.direction==='做多' ? (t.exit-t.entry)/t.entry : (t.entry-t.exit)/t.entry;
-  return t.size * pct - feeAmt(t.entry, t.exit, t.size, t.fee||0.05);
+  var pct = t.direction === '做多' ? (t.exit - t.entry) / t.entry : (t.entry - t.exit) / t.entry;
+  return t.size * pct - feeAmt(t.entry, t.exit, t.size, t.fee || 0.05);
 }
 function calcExpected(t) {
   if (!t.entry || !t.tp || !t.size) return null;
-  const pct = t.direction==='做多' ? (t.tp-t.entry)/t.entry : (t.entry-t.tp)/t.entry;
-  return t.size * pct - feeAmt(t.entry, t.tp, t.size, t.fee||0.05);
+  var pct = t.direction === '做多' ? (t.tp - t.entry) / t.entry : (t.entry - t.tp) / t.entry;
+  return t.size * pct - feeAmt(t.entry, t.tp, t.size, t.fee || 0.05);
 }
 function calcMaxRisk(t) {
   if (!t.entry || !t.sl || !t.size) return null;
-  const pct = t.direction==='做多' ? (t.entry-t.sl)/t.entry : (t.sl-t.entry)/t.entry;
-  return t.size * pct + feeAmt(t.entry, t.sl, t.size, t.fee||0.05);
+  var pct = t.direction === '做多' ? (t.entry - t.sl) / t.entry : (t.sl - t.entry) / t.entry;
+  return t.size * pct + feeAmt(t.entry, t.sl, t.size, t.fee || 0.05);
 }
 function calcRR(t) {
-  const exp = calcExpected(t), risk = calcMaxRisk(t);
-  if (!exp || !risk || risk===0) return null;
-  return exp/risk;
+  var exp = calcExpected(t), risk = calcMaxRisk(t);
+  if (!exp || !risk || risk === 0) return null;
+  return exp / risk;
 }
-function totalPnl() { return trades.map(calcPnl).filter(p=>p!==null).reduce((a,b)=>a+b,0); }
-function currentCapital() { return INIT_CAPITAL ? INIT_CAPITAL+totalPnl() : null; }
-
-function fmt(n, d=2) {
-  if (n===null||n===undefined||isNaN(n)) return '-';
-  return (n>=0?'+':'')+n.toFixed(d);
-}
-function fmtAbs(n, d=2) {
-  if (n===null||n===undefined||isNaN(n)) return '-';
-  return n.toFixed(d);
-}
+function totalPnl() { return trades.map(calcPnl).filter(function(p){return p!==null;}).reduce(function(a,b){return a+b;},0); }
+function currentCapital() { return INIT_CAPITAL ? INIT_CAPITAL + totalPnl() : null; }
+function fmt(n, d) { d = d||2; if (n===null||n===undefined||isNaN(n)) return '-'; return (n>=0?'+':'')+n.toFixed(d); }
+function fmtAbs(n, d) { d = d||2; if (n===null||n===undefined||isNaN(n)) return '-'; return n.toFixed(d); }
 
 // === Render ===
 function renderAll() { renderCapital(); renderSummary(); renderList(); }
 
 function renderCapital() {
-  const cap = currentCapital(), pnl = totalPnl();
-  const pct = INIT_CAPITAL ? (pnl/INIT_CAPITAL*100) : null;
+  var cap = currentCapital(), pnl = totalPnl();
+  var pct = INIT_CAPITAL ? (pnl / INIT_CAPITAL * 100) : null;
   if (!INIT_CAPITAL) {
-    document.getElementById('capital-section').innerHTML = `
-      <div style="background:#fff;border:0.5px solid #e8e8e8;border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:#999;text-align:center;cursor:pointer" onclick="switchTab('setup')">
-        💡 點此設定初始本金，追蹤帳戶成長
-      </div>`;
+    document.getElementById('capital-section').innerHTML = '<div style="background:#fff;border:0.5px solid #e8e8e8;border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:#999;text-align:center;cursor:pointer" onclick="switchTab(\'setup\')">💡 點此設定初始本金，追蹤帳戶成長</div>';
     return;
   }
-  const pctClass = pct>0?'profit':pct<0?'loss':'zero';
-  document.getElementById('capital-section').innerHTML = `
-    <div class="capital-card">
-      <div class="capital-label">目前本金</div>
-      <div class="capital-row">
-        <div class="capital-value">${cap!==null?cap.toFixed(2):'-'} <span style="font-size:14px;font-weight:400;color:#aaa">USDT</span></div>
-        <div class="capital-pct ${pctClass}">${fmt(pct,2)}%</div>
-      </div>
-      <div class="capital-sub">
-        <span>初始 ${INIT_CAPITAL.toFixed(2)}</span>
-        <span>累計損益 <b style="color:${pnl>=0?'#4ade80':'#f87171'}">${fmt(pnl)}</b> USDT</span>
-      </div>
-    </div>`;
+  var pctClass = pct > 0 ? 'profit' : pct < 0 ? 'loss' : 'zero';
+  document.getElementById('capital-section').innerHTML = '<div class="capital-card"><div class="capital-label">目前本金</div><div class="capital-row"><div class="capital-value">' + (cap !== null ? cap.toFixed(2) : '-') + ' <span style="font-size:14px;font-weight:400;color:#aaa">USDT</span></div><div class="capital-pct ' + pctClass + '">' + fmt(pct, 2) + '%</div></div><div class="capital-sub"><span>初始 ' + INIT_CAPITAL.toFixed(2) + '</span><span>累計損益 <b style="color:' + (pnl >= 0 ? '#4ade80' : '#f87171') + '">' + fmt(pnl) + '</b> USDT</span></div></div>';
 }
 
 function renderSummary() {
-  const pnls = trades.map(calcPnl).filter(p=>p!==null);
-  const total = pnls.reduce((a,b)=>a+b,0);
-  const wins = pnls.filter(p=>p>0).length;
-  const rate = pnls.length ? Math.round(wins/pnls.length*100) : 0;
-  const avgW = wins ? pnls.filter(p=>p>0).reduce((a,b)=>a+b,0)/wins : 0;
-  const lossCnt = pnls.filter(p=>p<0).length;
-  const avgL = lossCnt ? Math.abs(pnls.filter(p=>p<0).reduce((a,b)=>a+b,0)/lossCnt) : 0;
-  const rr = avgL ? (avgW/avgL).toFixed(2) : '-';
-  const totalFees = trades.filter(t=>t.entry&&t.exit&&t.size).reduce((acc,t)=>acc+feeAmt(t.entry,t.exit,t.size,t.fee||0.05),0);
-  document.getElementById('summary-stats').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">累計損益 (USDT)</div>
-      <div class="stat-value ${total>=0?'profit':'loss'}">${fmt(total)}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">勝率 / 次數</div>
-      <div class="stat-value ${rate>=50?'profit':'loss'}">${rate}% <span style="font-size:12px;color:#999">${pnls.length}筆</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">實際 RR</div>
-      <div class="stat-value">${rr}</div>
-    </div>
-    <div class="stat-card" style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div class="stat-label">總手續費支出</div>
-        <div class="stat-value loss">-${totalFees.toFixed(4)} USDT</div>
-      </div>
-      ${INIT_CAPITAL?`<div style="text-align:right"><div class="stat-label">佔初始本金</div><div style="font-size:15px;font-weight:500;color:#f59e0b">${(totalFees/INIT_CAPITAL*100).toFixed(3)}%</div></div>`:''}
-      <div style="text-align:right">
-        <div class="stat-label">平均每筆手續費</div>
-        <div style="font-size:15px;font-weight:500;color:#999">${trades.filter(t=>t.entry&&t.exit&&t.size).length?'-'+(totalFees/trades.filter(t=>t.entry&&t.exit&&t.size).length).toFixed(4)+' USDT':'-'}</div>
-      </div>
-    </div>`;
+  var pnls = trades.map(calcPnl).filter(function(p){return p!==null;});
+  var total = pnls.reduce(function(a,b){return a+b;},0);
+  var wins = pnls.filter(function(p){return p>0;}).length;
+  var rate = pnls.length ? Math.round(wins / pnls.length * 100) : 0;
+  var avgW = wins ? pnls.filter(function(p){return p>0;}).reduce(function(a,b){return a+b;},0)/wins : 0;
+  var lossCnt = pnls.filter(function(p){return p<0;}).length;
+  var avgL = lossCnt ? Math.abs(pnls.filter(function(p){return p<0;}).reduce(function(a,b){return a+b;},0)/lossCnt) : 0;
+  var rr = avgL ? (avgW/avgL).toFixed(2) : '-';
+  var totalFees = trades.filter(function(t){return t.entry&&t.exit&&t.size;}).reduce(function(acc,t){return acc+feeAmt(t.entry,t.exit,t.size,t.fee||0.05);},0);
+  document.getElementById('summary-stats').innerHTML =
+    '<div class="stat-card"><div class="stat-label">累計損益 (USDT)</div><div class="stat-value ' + (total>=0?'profit':'loss') + '">' + fmt(total) + '</div></div>' +
+    '<div class="stat-card"><div class="stat-label">勝率 / 次數</div><div class="stat-value ' + (rate>=50?'profit':'loss') + '">' + rate + '% <span style="font-size:12px;color:#999">' + pnls.length + '筆</span></div></div>' +
+    '<div class="stat-card"><div class="stat-label">實際 RR</div><div class="stat-value">' + rr + '</div></div>' +
+    '<div class="stat-card" style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center"><div><div class="stat-label">總手續費支出</div><div class="stat-value loss">-' + totalFees.toFixed(4) + ' USDT</div></div>' +
+    (INIT_CAPITAL ? '<div style="text-align:right"><div class="stat-label">佔初始本金</div><div style="font-size:15px;font-weight:500;color:#f59e0b">' + (totalFees/INIT_CAPITAL*100).toFixed(3) + '%</div></div>' : '') +
+    '<div style="text-align:right"><div class="stat-label">平均每筆手續費</div><div style="font-size:15px;font-weight:500;color:#999">' + (trades.filter(function(t){return t.entry&&t.exit&&t.size;}).length ? '-'+(totalFees/trades.filter(function(t){return t.entry&&t.exit&&t.size;}).length).toFixed(4)+' USDT' : '-') + '</div></div></div>';
 }
 
 function renderList() {
-  const el = document.getElementById('trades-list');
+  var el = document.getElementById('trades-list');
   if (!trades.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">還沒有交易紀錄<br>點上方按鈕新增第一筆</div></div>`;
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">還沒有交易紀錄<br>點上方按鈕新增第一筆</div></div>';
     return;
   }
-  let running = INIT_CAPITAL || 0;
-  const withCap = trades.map(t => {
-    const pnl = calcPnl(t), capBefore = running;
-    if (pnl!==null) running += pnl;
-    return { ...t, pnl, capAfter: INIT_CAPITAL?running:null, capBefore: INIT_CAPITAL?capBefore:null };
+  var running = INIT_CAPITAL || 0;
+  var withCap = trades.map(function(t) {
+    var pnl = calcPnl(t), capBefore = running;
+    if (pnl !== null) running += pnl;
+    return Object.assign({}, t, { pnl: pnl, capAfter: INIT_CAPITAL ? running : null, capBefore: INIT_CAPITAL ? capBefore : null });
   });
-
-  el.innerHTML = [...withCap].reverse().map(t => {
-    const dir = t.direction==='做多'?'long':'short';
-    const pctOfCap = (t.pnl!==null&&t.capBefore) ? (t.pnl/t.capBefore*100) : null;
-    const exp = calcExpected(t), risk = calcMaxRisk(t), rr = calcRR(t);
-    const imgs = [t.img0, t.img1, t.img2];
-    const hasImgs = imgs.some(Boolean);
-
-    const pnlCompare = (t.pnl!==null||exp!==null) ? `
-      <div class="pnl-compare">
-        <div class="pnl-box">
-          <div class="pnl-box-label">實際盈虧</div>
-          <div class="pnl-box-val ${t.pnl===null?'':t.pnl>=0?'profit':'loss'}">${t.pnl!==null?fmt(t.pnl)+' USDT':'-'}</div>
-          ${pctOfCap!==null?`<div class="pnl-box-sub">${fmt(pctOfCap,2)}% 本金</div>`:''}
-        </div>
-        <div class="pnl-box">
-          <div class="pnl-box-label">預期盈虧（止盈）</div>
-          <div class="pnl-box-val ${exp===null?'':exp>=0?'profit':'loss'}">${exp!==null?fmt(exp)+' USDT':'-'}</div>
-          ${rr!==null?`<div class="pnl-box-sub">預期 RR ${rr.toFixed(2)}</div>`:''}
-        </div>
-      </div>` : '';
-
-    const sltp = (t.sl||t.tp) ? `
-      <div class="trade-meta" style="margin-top:6px">
-        ${t.sl?`<span>止損 ${t.sl}</span>`:''}
-        ${t.tp?`<span>止盈 ${t.tp}</span>`:''}
-        ${risk!==null?`<span style="color:#dc2626">最大風險 ${fmtAbs(risk)} USDT</span>`:''}
-      </div>` : '';
-
-    const imgRow = hasImgs ? `
-      <div class="imgs-row">
-        ${imgs.map((img,i)=>`
-          <div class="img-slot">
-            <div class="img-slot-label">${IMG_LABELS[i]}</div>
-            ${img?`<img src="${img}">`:`<div class="img-slot-empty">${IMG_ICONS[i]}</div>`}
-          </div>`).join('')}
-      </div>` : '';
-
-    return `<div class="trade-card" onclick="openModal('${t.id}')">
-      <div class="trade-header">
-        <div>
-          <span class="trade-symbol">${t.symbol||'-'}</span>
-          <span class="badge badge-${dir}" style="margin-left:8px">${t.direction}</span>
-          <span class="badge badge-market" style="margin-left:4px">${t.market}</span>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:11px;color:#bbb">${t.date||''}</div>
-        </div>
-      </div>
-      <div class="trade-meta">
-        <span>進 ${t.entry||'-'} → 出 ${t.exit||'-'}</span>
-        <span>倉位 ${t.size||'-'} USDT</span>
-        <span>${t.method||''}</span>
-      </div>
-      ${sltp}
-      ${pnlCompare}
-      ${t.capAfter!==null?`<div style="font-size:11px;color:#bbb;margin-top:8px">交易後本金：${t.capAfter.toFixed(2)} USDT</div>`:''}
-      ${t.note?`<div class="note-preview" style="margin-top:6px">${t.note}</div>`:''}
-      ${imgRow}
-    </div>`;
+  el.innerHTML = withCap.slice().reverse().map(function(t) {
+    var dir = t.direction === '做多' ? 'long' : 'short';
+    var pctOfCap = (t.pnl !== null && t.capBefore) ? (t.pnl / t.capBefore * 100) : null;
+    var exp = calcExpected(t), risk = calcMaxRisk(t), rr = calcRR(t);
+    var imgs = [t.img0, t.img1, t.img2];
+    var hasImgs = imgs.some(function(i){return !!i;});
+    var pnlCompare = (t.pnl !== null || exp !== null) ?
+      '<div class="pnl-compare">' +
+      '<div class="pnl-box"><div class="pnl-box-label">實際盈虧</div><div class="pnl-box-val ' + (t.pnl===null?'':t.pnl>=0?'profit':'loss') + '">' + (t.pnl!==null?fmt(t.pnl)+' USDT':'-') + '</div>' + (pctOfCap!==null?'<div class="pnl-box-sub">'+fmt(pctOfCap,2)+'% 本金</div>':'') + '</div>' +
+      '<div class="pnl-box"><div class="pnl-box-label">預期盈虧（止盈）</div><div class="pnl-box-val ' + (exp===null?'':exp>=0?'profit':'loss') + '">' + (exp!==null?fmt(exp)+' USDT':'-') + '</div>' + (rr!==null?'<div class="pnl-box-sub">預期 RR '+rr.toFixed(2)+'</div>':'') + '</div>' +
+      '</div>' : '';
+    var sltp = (t.sl || t.tp) ?
+      '<div class="trade-meta" style="margin-top:6px">' +
+      (t.sl ? '<span>止損 ' + t.sl + '</span>' : '') +
+      (t.tp ? '<span>止盈 ' + t.tp + '</span>' : '') +
+      (risk !== null ? '<span style="color:#dc2626">最大風險 ' + fmtAbs(risk) + ' USDT</span>' : '') +
+      '</div>' : '';
+    var imgRow = hasImgs ?
+      '<div class="imgs-row">' +
+      imgs.map(function(img, i) {
+        return '<div class="img-slot"><div class="img-slot-label">' + IMG_LABELS[i] + '</div>' +
+          (img ? '<img src="' + img + '">' : '<div class="img-slot-empty">' + IMG_ICONS[i] + '</div>') + '</div>';
+      }).join('') + '</div>' : '';
+    return '<div class="trade-card" onclick="openModal(\'' + t.id + '\')">' +
+      '<div class="trade-header"><div><span class="trade-symbol">' + (t.symbol||'-') + '</span><span class="badge badge-' + dir + '" style="margin-left:8px">' + t.direction + '</span><span class="badge badge-market" style="margin-left:4px">' + t.market + '</span></div>' +
+      '<div style="text-align:right"><div style="font-size:11px;color:#bbb">' + (t.date||'') + '</div></div></div>' +
+      '<div class="trade-meta"><span>進 ' + (t.entry||'-') + ' → 出 ' + (t.exit||'-') + '</span><span>倉位 ' + (t.size||'-') + ' USDT</span><span>' + (t.method||'') + '</span></div>' +
+      sltp + pnlCompare +
+      (t.capAfter !== null ? '<div style="font-size:11px;color:#bbb;margin-top:8px">交易後本金：' + t.capAfter.toFixed(2) + ' USDT</div>' : '') +
+      (t.note ? '<div class="note-preview" style="margin-top:6px">' + t.note + '</div>' : '') +
+      imgRow + '</div>';
   }).join('');
 }
 
 function renderStats() {
-  const pnlTrades = trades.map(t=>({...t,pnl:calcPnl(t)})).filter(t=>t.pnl!==null);
-  if (!pnlTrades.length) {
-    document.getElementById('stats-content').innerHTML=`<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-text">尚無足夠資料</div></div>`;
-    return;
-  }
-  let eq = INIT_CAPITAL||0;
-  const eqPoints = pnlTrades.map(t=>{ eq+=t.pnl; return eq; });
-  const eqMin=Math.min(INIT_CAPITAL||eqPoints[0],...eqPoints), eqMax=Math.max(INIT_CAPITAL||eqPoints[0],...eqPoints);
-  const range=eqMax-eqMin||1, W=400, H=100, pad=8;
-  const pts=eqPoints.map((v,i)=>`${pad+(i/(eqPoints.length-1||1))*(W-pad*2)},${H-pad-((v-eqMin)/range)*(H-pad*2)}`).join(' ');
-  const lastColor=eqPoints[eqPoints.length-1]>=(INIT_CAPITAL||eqPoints[0])?'#16a34a':'#dc2626';
-  const equityChart = eqPoints.length>1?`
-    <div class="equity-wrap">
-      <div class="equity-title">資產曲線</div>
-      <svg class="equity-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-        <polyline points="${pts}" fill="none" stroke="${lastColor}" stroke-width="2" stroke-linejoin="round"/>
-      </svg>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#999;margin-top:4px">
-        <span>最低 ${eqMin.toFixed(0)}</span><span>最高 ${eqMax.toFixed(0)} USDT</span>
-      </div>
-    </div>`:'';
-
-  // RR comparison
-  const rrTrades = trades.filter(t=>calcRR(t)!==null&&calcPnl(t)!==null);
-  const rrCompare = rrTrades.length ? `
-    <div style="font-size:13px;font-weight:500;color:#666;margin:16px 0 10px">預期 vs 實際 RR</div>
-    <div class="trade-card">
-      ${rrTrades.slice(-10).reverse().map(t=>{
-        const actual = calcPnl(t), exp = calcExpected(t), rr = calcRR(t);
-        const actualRR = calcMaxRisk(t) ? actual/calcMaxRisk(t) : null;
-        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid #f0f0f0;font-size:13px">
-          <span style="font-weight:500">${t.symbol||'-'} <span style="font-size:11px;color:#999">${t.date||''}</span></span>
-          <span>預期 <b>${rr!==null?'1:'+rr.toFixed(2):'-'}</b> → 實際 <b style="color:${actualRR>=0?'#16a34a':'#dc2626'}">${actualRR!==null?'1:'+actualRR.toFixed(2):'-'}</b></span>
-        </div>`;
-      }).join('')}
-    </div>` : '';
-
-  const byMarket={};
-  pnlTrades.forEach(t=>{
-    if(!byMarket[t.market]) byMarket[t.market]={total:0,count:0,wins:0};
-    byMarket[t.market].total+=t.pnl; byMarket[t.market].count++;
-    if(t.pnl>0) byMarket[t.market].wins++;
-  });
-  const marketRows=Object.entries(byMarket).map(([m,d])=>`
-    <div class="trade-card" style="margin-bottom:10px">
-      <div class="trade-header"><div class="trade-symbol">${m}</div><div class="trade-pnl ${d.total>=0?'profit':'loss'}">${fmt(d.total)} USDT</div></div>
-      <div class="trade-meta"><span>${d.count} 筆</span><span>勝率 ${Math.round(d.wins/d.count*100)}%</span></div>
-    </div>`).join('');
-
-  const bySym={};
-  pnlTrades.forEach(t=>{ if(!bySym[t.symbol]) bySym[t.symbol]={total:0,count:0}; bySym[t.symbol].total+=t.pnl; bySym[t.symbol].count++; });
-  const topSym=Object.entries(bySym).sort((a,b)=>Math.abs(b[1].total)-Math.abs(a[1].total)).slice(0,6);
-  const maxAbs=Math.max(...topSym.map(([,d])=>Math.abs(d.total)));
-  const bars=topSym.map(([sym,d])=>`<div class="bar-row"><div class="bar-label">${sym}</div><div class="bar-track"><div class="bar-fill ${d.total>=0?'profit':'loss'}" style="width:${maxAbs?Math.round(Math.abs(d.total)/maxAbs*100):0}%">${fmt(d.total)}</div></div></div>`).join('');
-
-  document.getElementById('stats-content').innerHTML = `
-    ${equityChart}
-    ${rrCompare}
-    <div style="font-size:13px;font-weight:500;color:#666;margin-bottom:10px">依市場分類</div>
-    ${marketRows}
-    <div style="font-size:13px;font-weight:500;color:#666;margin:16px 0 10px">幣種 / 股票損益</div>
-    <div class="trade-card">${bars}</div>`;
+  var pnlTrades = trades.map(function(t){return Object.assign({},t,{pnl:calcPnl(t)});}).filter(function(t){return t.pnl!==null;});
+  if (!pnlTrades.length) { document.getElementById('stats-content').innerHTML='<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-text">尚無足夠資料</div></div>'; return; }
+  var eq = INIT_CAPITAL || 0;
+  var eqPoints = pnlTrades.map(function(t){eq+=t.pnl;return eq;});
+  var eqMin = Math.min.apply(null, [INIT_CAPITAL||eqPoints[0]].concat(eqPoints));
+  var eqMax = Math.max.apply(null, [INIT_CAPITAL||eqPoints[0]].concat(eqPoints));
+  var range = eqMax - eqMin || 1, W = 400, H = 100, pad = 8;
+  var pts = eqPoints.map(function(v,i){return (pad+(i/(eqPoints.length-1||1))*(W-pad*2))+','+(H-pad-((v-eqMin)/range)*(H-pad*2));}).join(' ');
+  var lastColor = eqPoints[eqPoints.length-1] >= (INIT_CAPITAL||eqPoints[0]) ? '#16a34a' : '#dc2626';
+  var equityChart = eqPoints.length > 1 ? '<div class="equity-wrap"><div class="equity-title">資產曲線</div><svg class="equity-chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="'+lastColor+'" stroke-width="2" stroke-linejoin="round"/></svg><div style="display:flex;justify-content:space-between;font-size:11px;color:#999;margin-top:4px"><span>最低 '+eqMin.toFixed(0)+'</span><span>最高 '+eqMax.toFixed(0)+' USDT</span></div></div>' : '';
+  var byMarket = {};
+  pnlTrades.forEach(function(t){if(!byMarket[t.market])byMarket[t.market]={total:0,count:0,wins:0};byMarket[t.market].total+=t.pnl;byMarket[t.market].count++;if(t.pnl>0)byMarket[t.market].wins++;});
+  var marketRows = Object.keys(byMarket).map(function(m){var d=byMarket[m];return '<div class="trade-card" style="margin-bottom:10px"><div class="trade-header"><div class="trade-symbol">'+m+'</div><div class="trade-pnl '+(d.total>=0?'profit':'loss')+'">'+fmt(d.total)+' USDT</div></div><div class="trade-meta"><span>'+d.count+' 筆</span><span>勝率 '+Math.round(d.wins/d.count*100)+'%</span></div></div>';}).join('');
+  var bySym = {};
+  pnlTrades.forEach(function(t){if(!bySym[t.symbol])bySym[t.symbol]={total:0,count:0};bySym[t.symbol].total+=t.pnl;bySym[t.symbol].count++;});
+  var topSym = Object.keys(bySym).map(function(k){return [k,bySym[k]];}).sort(function(a,b){return Math.abs(b[1].total)-Math.abs(a[1].total);}).slice(0,6);
+  var maxAbs = Math.max.apply(null, topSym.map(function(s){return Math.abs(s[1].total);}));
+  var bars = topSym.map(function(s){var sym=s[0],d=s[1];var w=maxAbs?Math.round(Math.abs(d.total)/maxAbs*100):0;return '<div class="bar-row"><div class="bar-label">'+sym+'</div><div class="bar-track"><div class="bar-fill '+(d.total>=0?'profit':'loss')+'" style="width:'+w+'%">'+fmt(d.total)+'</div></div></div>';}).join('');
+  document.getElementById('stats-content').innerHTML = equityChart + '<div style="font-size:13px;font-weight:500;color:#666;margin-bottom:10px">依市場分類</div>' + marketRows + '<div style="font-size:13px;font-weight:500;color:#666;margin:16px 0 10px">幣種 / 股票損益</div><div class="trade-card">' + bars + '</div>';
 }
 
 // === Tab ===
 function switchTab(tab) {
-  ['list','stats','setup'].forEach(t=>document.getElementById(t+'-view').style.display=t===tab?'':'none');
-  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['list','stats','setup'][i]===tab));
-  if(tab==='stats') renderStats();
-  if(tab==='setup'){ document.getElementById('api-url-input').value=API_URL; document.getElementById('init-capital-input').value=INIT_CAPITAL||''; }
+  ['list','stats','setup'].forEach(function(t){document.getElementById(t+'-view').style.display=t===tab?'':'none';});
+  document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',['list','stats','setup'][i]===tab);});
+  if (tab === 'stats') renderStats();
+  if (tab === 'setup') { document.getElementById('api-url-input').value=API_URL; document.getElementById('init-capital-input').value=INIT_CAPITAL||''; }
 }
 
 // === Modal ===
 function openModal(id) {
-  editingId=id||null; imgData=[null,null,null];
-  document.getElementById('modal-title').textContent=id?'編輯交易':'新增交易';
-  document.getElementById('delete-btn').style.display=id?'':'none';
+  editingId = id || null;
+  imgData = [null, null, null];
+  document.getElementById('modal-title').textContent = id ? '編輯交易' : '新增交易';
+  document.getElementById('delete-btn').style.display = id ? '' : 'none';
   resetSlots();
-  if(id){
-    const t=trades.find(x=>x.id==id); if(!t) return;
-    document.getElementById('f-symbol').value=t.symbol||'';
-    document.getElementById('f-market').value=t.market||'加密貨幣';
-    document.getElementById('f-direction').value=t.direction||'做多';
-    document.getElementById('f-entry').value=t.entry||'';
-    document.getElementById('f-exit').value=t.exit||'';
-    document.getElementById('f-size').value=t.size||'';
-    document.getElementById('f-fee').value=t.fee||0.05;
-    document.getElementById('f-sl').value=t.sl||'';
-    document.getElementById('f-tp').value=t.tp||'';
-    document.getElementById('f-method').value=t.method||'市價單';
-    document.getElementById('f-date').value=t.date||'';
-    document.getElementById('f-note').value=t.note||'';
-    [t.img0,t.img1,t.img2].forEach((img,i)=>{ if(img){ imgData[i]=img; renderSlot(i,img); } });
+  if (id) {
+    var t = trades.filter(function(x){return x.id == id;})[0];
+    if (!t) return;
+    document.getElementById('f-symbol').value = t.symbol || '';
+    document.getElementById('f-market').value = t.market || '加密貨幣';
+    document.getElementById('f-direction').value = t.direction || '做多';
+    document.getElementById('f-entry').value = t.entry || '';
+    document.getElementById('f-exit').value = t.exit || '';
+    document.getElementById('f-size').value = t.size || '';
+    document.getElementById('f-fee').value = t.fee || 0.05;
+    document.getElementById('f-sl').value = t.sl || '';
+    document.getElementById('f-tp').value = t.tp || '';
+    document.getElementById('f-method').value = t.method || '市價單';
+    document.getElementById('f-date').value = t.date || '';
+    document.getElementById('f-note').value = t.note || '';
+    [t.img0, t.img1, t.img2].forEach(function(img, i) {
+      if (img) { imgData[i] = img; renderSlot(i, img); }
+    });
   } else {
-    ['f-symbol','f-entry','f-exit','f-size','f-sl','f-tp','f-note'].forEach(i=>document.getElementById(i).value='');
-    document.getElementById('f-fee').value=0.05;
-    document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
-    document.getElementById('f-market').value='加密貨幣';
-    document.getElementById('f-direction').value='做多';
-    document.getElementById('f-method').value='市價單';
+    ['f-symbol','f-entry','f-exit','f-size','f-sl','f-tp','f-note'].forEach(function(id){document.getElementById(id).value='';});
+    document.getElementById('f-fee').value = 0.05;
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('f-market').value = '加密貨幣';
+    document.getElementById('f-direction').value = '做多';
+    document.getElementById('f-method').value = '市價單';
   }
   updatePnlPreview();
   document.getElementById('modal').classList.add('open');
 }
-function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
-function triggerUpload(i) { document.getElementById('f-img-'+i).click(); }
-
-function resetSlots() {
-  [0,1,2].forEach(i=>{ renderSlot(i,null); });
-}
+function triggerUpload(i) { document.getElementById('f-img-' + i).click(); }
+function resetSlots() { [0,1,2].forEach(function(i){renderSlot(i,null);}); }
 function renderSlot(i, src) {
-  const slot = document.getElementById('slot-'+i);
-  if(src) {
-    slot.innerHTML=`<img src="${src}"><div class="remove-img" onclick="removeImg(event,${i})">✕ 移除</div>`;
+  var slot = document.getElementById('slot-' + i);
+  if (src) {
+    slot.innerHTML = '<img src="' + src + '"><div class="remove-img" onclick="removeImg(event,' + i + ')">✕ 移除</div>';
   } else {
-    slot.innerHTML=`<div class="slot-icon">${IMG_ICONS[i]}</div><div>${IMG_LABELS[i]}</div>`;
+    slot.innerHTML = '<div class="slot-icon">' + IMG_ICONS[i] + '</div><div>' + IMG_LABELS[i] + '</div>';
   }
 }
-function removeImg(e, i) { e.stopPropagation(); imgData[i]=null; renderSlot(i,null); }
+function removeImg(e, i) { e.stopPropagation(); imgData[i] = null; renderSlot(i, null); }
 
 function previewImg(e, i) {
-  const file=e.target.files[0]; if(!file) return;
-  const canvas=document.createElement('canvas'), img=new Image(), reader=new FileReader();
-  reader.onload=ev=>{ img.onload=()=>{ const MAX=800; let w=img.width,h=img.height; if(w>MAX){h=Math.round(h*MAX/w);w=MAX;} canvas.width=w;canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); imgData[i]=canvas.toDataURL('image/jpeg',0.7); renderSlot(i,imgData[i]); }; img.src=ev.target.result; }; reader.readAsDataURL(file);
+  var file = e.target.files[0]; if (!file) return;
+  var canvas = document.createElement('canvas'), img = new Image(), reader = new FileReader();
+  reader.onload = function(ev) {
+    img.onload = function() {
+      var MAX = 800, w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      imgData[i] = canvas.toDataURL('image/jpeg', 0.7);
+      renderSlot(i, imgData[i]);
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
-// Live preview
 function updatePnlPreview() {
-  const entry=parseFloat(document.getElementById('f-entry').value);
-  const exit=parseFloat(document.getElementById('f-exit').value);
-  const sl=parseFloat(document.getElementById('f-sl').value);
-  const tp=parseFloat(document.getElementById('f-tp').value);
-  const size=parseFloat(document.getElementById('f-size').value);
-  const fee=parseFloat(document.getElementById('f-fee').value)||0.05;
-  const dir=document.getElementById('f-direction').value;
-  const preview=document.getElementById('pnl-preview');
-  if(!entry||!size){ preview.style.display='none'; return; }
-
-  const feeRate=fee/100;
-  const mock={entry,exit:exit||null,sl:sl||null,tp:tp||null,size,fee,direction:dir};
-
-  // Actual
-  const actualPnl = calcPnl(mock);
-  const cap = currentCapital()||INIT_CAPITAL;
-  const actualPct = (actualPnl!==null&&cap) ? (actualPnl/cap*100) : null;
-  document.getElementById('prev-actual').textContent = actualPnl!==null ? fmt(actualPnl)+' USDT' : '（尚未出場）';
-  document.getElementById('prev-actual').style.color = actualPnl===null?'#999':actualPnl>=0?'#16a34a':'#dc2626';
-  document.getElementById('prev-actual-pct').textContent = actualPct!==null ? `佔本金 ${fmt(actualPct,2)}%` : '';
-
-  // Expected
-  const expPnl = calcExpected(mock);
-  const risk = calcMaxRisk(mock);
-  const rr = (expPnl&&risk&&risk!==0) ? (expPnl/risk) : null;
-  const feeTotal = exit ? feeAmt(entry,exit,size,feeRate) : (entry?feeAmt(entry,entry,size,feeRate)*2:0);
-
-  document.getElementById('prev-tp').textContent = expPnl!==null ? fmt(expPnl)+' USDT' : '-';
-  document.getElementById('prev-tp').style.color = expPnl!==null ? (expPnl>=0?'#16a34a':'#dc2626') : '#999';
-  document.getElementById('prev-sl').textContent = risk!==null ? '-'+risk.toFixed(2)+' USDT' : '-';
+  var entry = parseFloat(document.getElementById('f-entry').value);
+  var exit = parseFloat(document.getElementById('f-exit').value);
+  var sl = parseFloat(document.getElementById('f-sl').value);
+  var tp = parseFloat(document.getElementById('f-tp').value);
+  var size = parseFloat(document.getElementById('f-size').value);
+  var fee = parseFloat(document.getElementById('f-fee').value) || 0.05;
+  var dir = document.getElementById('f-direction').value;
+  var preview = document.getElementById('pnl-preview');
+  if (!entry || !size) { preview.style.display = 'none'; return; }
+  var mock = { entry: entry, exit: exit||null, sl: sl||null, tp: tp||null, size: size, fee: fee, direction: dir };
+  var actualPnl = calcPnl(mock);
+  var cap = currentCapital() || INIT_CAPITAL;
+  var actualPct = (actualPnl !== null && cap) ? (actualPnl / cap * 100) : null;
+  document.getElementById('prev-actual').textContent = actualPnl !== null ? fmt(actualPnl) + ' USDT' : '（尚未出場）';
+  document.getElementById('prev-actual').style.color = actualPnl === null ? '#999' : actualPnl >= 0 ? '#16a34a' : '#dc2626';
+  document.getElementById('prev-actual-pct').textContent = actualPct !== null ? '佔本金 ' + fmt(actualPct, 2) + '%' : '';
+  var expPnl = calcExpected(mock), risk = calcMaxRisk(mock);
+  var rr = (expPnl && risk && risk !== 0) ? (expPnl / risk) : null;
+  document.getElementById('prev-tp').textContent = expPnl !== null ? fmt(expPnl) + ' USDT' : '-';
+  document.getElementById('prev-tp').style.color = expPnl !== null ? (expPnl >= 0 ? '#16a34a' : '#dc2626') : '#999';
+  document.getElementById('prev-sl').textContent = risk !== null ? '-' + risk.toFixed(2) + ' USDT' : '-';
   document.getElementById('prev-sl').style.color = '#dc2626';
-  document.getElementById('prev-rr').textContent = rr!==null ? '1 : '+rr.toFixed(2) : '-';
-  document.getElementById('prev-fee').textContent = exit ? '-'+feeAmt(entry,exit,size,feeRate).toFixed(4)+' USDT' : '-';
-  preview.style.display='';
+  document.getElementById('prev-rr').textContent = rr !== null ? '1 : ' + rr.toFixed(2) : '-';
+  document.getElementById('prev-fee').textContent = exit ? '-' + feeAmt(entry, exit, size, fee/100 * 100).toFixed(4) + ' USDT' : '-';
+  preview.style.display = '';
 }
 
-['f-entry','f-exit','f-size','f-fee','f-sl','f-tp','f-direction'].forEach(id=>{
+['f-entry','f-exit','f-size','f-fee','f-sl','f-tp','f-direction'].forEach(function(id) {
   document.getElementById(id).addEventListener('input', updatePnlPreview);
   document.getElementById(id).addEventListener('change', updatePnlPreview);
 });
 
-async function saveTrade() {
-  const btn = document.getElementById('save-btn');
+// === Save ===
+function saveTrade() {
+  var btn = document.getElementById('save-btn');
   btn.disabled = true; btn.textContent = '儲存中...';
 
-  // 先上傳有變動的圖片到 Drive
-  const imgResults = [null, null, null];
-  for (let i = 0; i < 3; i++) {
-    if (imgData[i] && imgData[i].startsWith('data:')) {
-      // 新圖片（base64），上傳到 Drive
-      btn.textContent = `上傳圖片 ${i+1}/3...`;
-      const result = await uploadImgToDrive(imgData[i], i);
-      if (result) {
-        imgResults[i] = result; // { url, fileId }
-      }
-    } else if (imgData[i] && imgData[i].startsWith('http')) {
-      // 已是 Drive URL，保持不變（編輯時）
-      const t = editingId ? trades.find(x => x.id == editingId) : null;
-      imgResults[i] = t ? { url: t[`img${i}`], fileId: t[`img${i}Id`] } : null;
-    }
-  }
-
-  const t = {
+  var t = {
     id: editingId || Date.now().toString(),
     symbol: document.getElementById('f-symbol').value.trim().toUpperCase(),
     market: document.getElementById('f-market').value,
@@ -785,68 +586,92 @@ async function saveTrade() {
     method: document.getElementById('f-method').value,
     date: document.getElementById('f-date').value,
     note: document.getElementById('f-note').value.trim(),
-    img0: imgResults[0] ? imgResults[0].url : null,
-    img0Id: imgResults[0] ? imgResults[0].fileId : null,
-    img1: imgResults[1] ? imgResults[1].url : null,
-    img1Id: imgResults[1] ? imgResults[1].fileId : null,
-    img2: imgResults[2] ? imgResults[2].url : null,
-    img2Id: imgResults[2] ? imgResults[2].fileId : null,
+    img0: null, img0Id: null, img1: null, img1Id: null, img2: null, img2Id: null
   };
 
-  if (editingId) { const idx = trades.findIndex(x => x.id == editingId); if (idx >= 0) trades[idx] = t; }
-  else trades.push(t);
-  localStorage.setItem('trades', JSON.stringify(trades));
-
-  if (API_URL) {
-    btn.textContent = '同步中...';
-    const res = await apiFetch({ action: 'save', trade: t });
-    setSyncStatus(res && res.ok ? 'ok' : 'error');
+  // 保留已有的 Drive URL
+  if (editingId) {
+    var existing = trades.filter(function(x){return x.id == editingId;})[0];
+    if (existing) {
+      [0,1,2].forEach(function(i) {
+        if (imgData[i] && imgData[i].indexOf('http') === 0) {
+          t['img'+i] = existing['img'+i];
+          t['img'+i+'Id'] = existing['img'+i+'Id'];
+        }
+      });
+    }
   }
 
-  btn.disabled = false; btn.textContent = '儲存紀錄';
-  closeModal(); renderAll();
+  // 上傳新圖片（base64）
+  var pending = [0,1,2].filter(function(i){ return imgData[i] && imgData[i].indexOf('data:') === 0; });
+  var uploaded = 0;
+
+  function onAllUploaded() {
+    if (editingId) {
+      var idx = trades.map(function(x){return x.id;}).indexOf(editingId);
+      if (idx >= 0) trades[idx] = t;
+    } else {
+      trades.push(t);
+    }
+    localStorage.setItem('trades', JSON.stringify(trades));
+    if (API_URL) {
+      btn.textContent = '同步中...';
+      apiFetch({ action: 'save', trade: t }, function(res) {
+        setSyncStatus(res && res.ok ? 'ok' : 'error');
+      });
+    }
+    btn.disabled = false; btn.textContent = '儲存紀錄';
+    closeModal(); renderAll();
+  }
+
+  if (pending.length === 0) {
+    onAllUploaded();
+  } else {
+    pending.forEach(function(i) {
+      btn.textContent = '上傳圖片...';
+      uploadImgToDrive(imgData[i], i, function(result) {
+        if (result) { t['img'+i] = result.url; t['img'+i+'Id'] = result.fileId; }
+        uploaded++;
+        if (uploaded === pending.length) onAllUploaded();
+      });
+    });
+  }
 }
 
-async function deleteTrade() {
-  if(!editingId||!confirm('確定刪除這筆紀錄？')) return;
-  const idToDelete = editingId;
-
-  // 立刻更新畫面，不等 API
-  trades = trades.filter(t => t.id != idToDelete);
+function deleteTrade() {
+  if (!editingId || !confirm('確定刪除這筆紀錄？')) return;
+  var idToDelete = editingId;
+  trades = trades.filter(function(t){return t.id != idToDelete;});
   localStorage.setItem('trades', JSON.stringify(trades));
-  closeModal();
-  renderAll();
-
-  // 背景靜默同步，不阻塞 UI
-  if(API_URL) {
-    apiFetch({action:'delete', id: idToDelete}).then(res => {
+  closeModal(); renderAll();
+  if (API_URL) {
+    apiFetch({ action: 'delete', id: idToDelete }, function(res) {
       setSyncStatus(res && res.ok ? 'ok' : 'error');
     });
   }
 }
 
 function saveCapital() {
-  const v=parseFloat(document.getElementById('init-capital-input').value);
-  const el=document.getElementById('capital-result');
-  if(!v||v<=0){el.style.color='#dc2626';el.textContent='請輸入有效的本金數值';return;}
-  INIT_CAPITAL=v; localStorage.setItem('init_capital',v);
-  el.style.color='#16a34a'; el.textContent=`✅ 已設定初始本金：${v.toFixed(2)} USDT`;
+  var v = parseFloat(document.getElementById('init-capital-input').value);
+  var el = document.getElementById('capital-result');
+  if (!v || v <= 0) { el.style.color = '#dc2626'; el.textContent = '請輸入有效的本金數值'; return; }
+  INIT_CAPITAL = v; localStorage.setItem('init_capital', v);
+  el.style.color = '#16a34a'; el.textContent = '✅ 已設定初始本金：' + v.toFixed(2) + ' USDT';
   renderAll();
 }
 
-async function saveApiUrl() {
-  const url=document.getElementById('api-url-input').value.trim();
-  const el=document.getElementById('conn-result');
-  if(!url) return;
-  el.textContent='測試中...'; el.style.color='#999';
-  try {
-    const data=await (await fetch(`${url}?action=getAll`)).json();
-    if(data&&Array.isArray(data.trades)){
-      API_URL=url; localStorage.setItem('api_url',url);
-      el.style.color='#16a34a'; el.textContent='✅ 連線成功！';
-      trades=parseTrades(data.trades); setSyncStatus('ok'); renderAll();
-    } else throw new Error();
-  } catch(e){ el.style.color='#dc2626'; el.textContent='❌ 連線失敗，請確認網址與存取權設定。'; }
+function saveApiUrl() {
+  var url = document.getElementById('api-url-input').value.trim();
+  var el = document.getElementById('conn-result');
+  if (!url) return;
+  el.textContent = '測試中...'; el.style.color = '#999';
+  fetch(url + '?action=getAll').then(function(r){return r.json();}).then(function(data) {
+    if (data && Array.isArray(data.trades)) {
+      API_URL = url; localStorage.setItem('api_url', url);
+      el.style.color = '#16a34a'; el.textContent = '✅ 連線成功！';
+      trades = parseTrades(data.trades); setSyncStatus('ok'); renderAll();
+    } else { throw new Error(); }
+  }).catch(function() { el.style.color = '#dc2626'; el.textContent = '❌ 連線失敗，請確認網址與存取權設定。'; });
 }
 
 loadTrades();

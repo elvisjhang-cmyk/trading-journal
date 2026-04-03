@@ -273,7 +273,7 @@ function uploadImgToDrive(base64DataUrl, slot, cb) {
   if (!API_URL || !base64DataUrl) { cb(null); return; }
   var base64 = base64DataUrl.replace(/^data:image\/\w+;base64,/, '');
   var mimeType = 'image/jpeg';
-  var filename = 'trade_' + Date.now() + '_slot' + i + '_' + Math.random().toString(36).slice(2, 7) + '.jpg';
+  var filename = 'trade_' + Date.now() + '_slot' + slot + '_' + Math.random().toString(36).slice(2, 7) + '.jpg';
   fetch(API_URL, {
     method: 'POST',
     body: JSON.stringify({ action: 'uploadImg', filename: filename, base64: base64, mimeType: mimeType }),

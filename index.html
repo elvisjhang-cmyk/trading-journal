@@ -549,7 +549,6 @@ function previewImg(e, i) {
   reader.readAsDataURL(file);
 }
 
-// 雙向計算：倉位金額 ↔ 買入數量
 function onSizeInput() {
   var size = parseFloat(document.getElementById('f-size').value);
   var entry = parseFloat(document.getElementById('f-entry').value);
@@ -560,6 +559,7 @@ function onSizeInput() {
   }
   updatePnlPreview();
 }
+
 function onQtyInput() {
   var qty = parseFloat(document.getElementById('f-qty').value);
   var entry = parseFloat(document.getElementById('f-entry').value);

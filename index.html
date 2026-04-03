@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Content-Security-Policy" content="img-src * data: blob:;">
 <title>交易紀錄本</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,7 +35,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .trade-card:active { opacity: 0.7; }
 .trade-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
 .trade-symbol { font-size: 16px; font-weight: 500; }
-.trade-pnl { font-size: 16px; font-weight: 500; text-align: right; }
 .trade-meta { font-size: 12px; color: #999; display: flex; gap: 12px; flex-wrap: wrap; }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
 .badge-long { background: #dcfce7; color: #166534; }
@@ -61,9 +59,9 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: #999; }
 .upload-slot img { width: 100%; border-radius: 6px; aspect-ratio: 4/3; object-fit: cover; display: block; margin-bottom: 4px; }
 .upload-slot .remove-img { font-size: 10px; color: #dc2626; margin-top: 2px; }
 .pnl-preview-box { background: #f5f5f5; border-radius: 10px; padding: 12px; margin-bottom: 16px; }
-.pnl-preview-box .preview-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.pnl-preview-box .preview-label { font-size: 12px; color: #999; }
-.pnl-preview-box .preview-val { font-size: 14px; font-weight: 500; }
+.preview-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.preview-label { font-size: 12px; color: #999; }
+.preview-val { font-size: 14px; font-weight: 500; }
 .save-btn { width: 100%; padding: 13px; background: #1a1a1a; color: #fff; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; margin-top: 8px; }
 .save-btn:disabled { background: #999; cursor: not-allowed; }
 .delete-btn { width: 100%; padding: 13px; background: #fff; color: #dc2626; border: 0.5px solid #dc2626; border-radius: 12px; font-size: 15px; cursor: pointer; margin-top: 8px; }
@@ -141,7 +139,6 @@ svg.equity-chart { width: 100%; height: 120px; }
   </div>
 </div>
 
-<!-- Modal -->
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-header">
@@ -185,18 +182,16 @@ svg.equity-chart { width: 100%; height: 120px; }
     <div class="form-row">
       <div class="form-group">
         <label>倉位金額 (USDT)</label>
-        <input type="number" id="f-size" placeholder="例：3000" step="any" oninput="onSizeInput()">
+        <input type="number" id="f-size" placeholder="例：3000" step="any">
       </div>
       <div class="form-group">
         <label>買入數量</label>
-        <input type="number" id="f-qty" placeholder="例：0.03" step="any" oninput="onQtyInput()">
+        <input type="number" id="f-qty" placeholder="例：0.03" step="any">
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>手續費率 (%)</label>
-        <input type="number" id="f-fee" placeholder="0.05" step="0.001" value="0.05">
-      </div>
+    <div class="form-group">
+      <label>手續費率 (%)</label>
+      <input type="number" id="f-fee" placeholder="0.05" step="0.001" value="0.05">
     </div>
     <div class="section-title">計畫止損 / 止盈</div>
     <div class="form-row">
@@ -264,10 +259,8 @@ var INIT_CAPITAL = parseFloat(localStorage.getItem('init_capital')) || 0;
 var IMG_LABELS = ['入場理由','開單截圖','關單截圖'];
 var IMG_ICONS = ['📋','📈','📉'];
 
-// === 上傳圖片到 Google Drive ===
 function uploadImgToDrive(base64DataUrl, slot, cb) {
   if (!API_URL || !base64DataUrl) { cb(null); return; }
-  // 統一用 jpeg
   var base64 = base64DataUrl.replace(/^data:image\/\w+;base64,/, '');
   var mimeType = 'image/jpeg';
   var filename = 'trade_' + Date.now() + '_' + slot + '.jpg';
@@ -275,27 +268,21 @@ function uploadImgToDrive(base64DataUrl, slot, cb) {
     method: 'POST',
     body: JSON.stringify({ action: 'uploadImg', filename: filename, base64: base64, mimeType: mimeType }),
     headers: { 'Content-Type': 'text/plain' }
-  }).then(function(res) {
-    return res.json();
-  }).then(function(data) {
+  }).then(function(res) { return res.json(); }).then(function(data) {
     cb(data.ok ? { url: data.url, fileId: data.fileId } : null);
   }).catch(function() { cb(null); });
 }
 
-// === API ===
 function apiFetch(params, cb) {
   if (!API_URL) { cb(null); return; }
   var action = params.action;
+  var url = API_URL + '?action=' + action;
   if (action === 'save') {
-    // 圖片 URL 很短（不是 base64），可以直接存進 Sheets
-    var url = API_URL + '?action=save&trade=' + encodeURIComponent(JSON.stringify(params.trade));
-    fetch(url).then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
+    url += '&trade=' + encodeURIComponent(JSON.stringify(params.trade));
   } else if (action === 'delete') {
-    var url = API_URL + '?action=delete&id=' + encodeURIComponent(params.id);
-    fetch(url).then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
-  } else {
-    cb(null);
+    url += '&id=' + encodeURIComponent(params.id);
   }
+  fetch(url).then(function(r) { return r.json(); }).then(function(d) { cb(d); }).catch(function() { cb(null); });
 }
 
 function apiGet(cb) {
@@ -320,7 +307,6 @@ function loadTrades() {
 
 function parseTrades(arr) {
   return arr.map(function(t) {
-    // 修正日期格式，只取 yyyy-MM-dd 部分
     var date = t.date ? String(t.date).split('T')[0] : '';
     return Object.assign({}, t, {
       entry: +t.entry||null, exit: +t.exit||null,
@@ -333,41 +319,68 @@ function parseTrades(arr) {
 
 function setSyncStatus(s) {
   var now = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  var map = { ok:'🟢 已同步 Google Sheets　'+now, syncing:'🔄 同步中...', error:'🔴 連線失敗，顯示本機', local:'⚪ 本機模式（未設定雲端）' };
+  var map = {
+    ok: '🟢 已同步 Google Sheets　' + now,
+    syncing: '🔄 同步中...',
+    error: '🔴 連線失敗，顯示本機',
+    local: '⚪ 本機模式（未設定雲端）'
+  };
   document.getElementById('sync-status').textContent = map[s] || s;
 }
 
-// === Calc ===
 function feeAmt(entry, exit, size, feeRate) {
   return size * (feeRate / 100) * 2;
 }
+
 function calcPnl(t) {
-  if (!t.entry || !t.exit || !t.size) return null;
+  if (!t.entry || !t.exit || !t.size) { return null; }
   var pct = t.direction === '做多' ? (t.exit - t.entry) / t.entry : (t.entry - t.exit) / t.entry;
   return t.size * pct - feeAmt(t.entry, t.exit, t.size, t.fee || 0.05);
 }
+
 function calcExpected(t) {
-  if (!t.entry || !t.tp || !t.size) return null;
+  if (!t.entry || !t.tp || !t.size) { return null; }
   var pct = t.direction === '做多' ? (t.tp - t.entry) / t.entry : (t.entry - t.tp) / t.entry;
   return t.size * pct - feeAmt(t.entry, t.tp, t.size, t.fee || 0.05);
 }
+
 function calcMaxRisk(t) {
-  if (!t.entry || !t.sl || !t.size) return null;
+  if (!t.entry || !t.sl || !t.size) { return null; }
   var pct = t.direction === '做多' ? (t.entry - t.sl) / t.entry : (t.sl - t.entry) / t.entry;
   return t.size * pct + feeAmt(t.entry, t.sl, t.size, t.fee || 0.05);
 }
+
 function calcRR(t) {
   var exp = calcExpected(t), risk = calcMaxRisk(t);
-  if (!exp || !risk || risk === 0) return null;
+  if (!exp || !risk || risk === 0) { return null; }
   return exp / risk;
 }
-function totalPnl() { return trades.map(calcPnl).filter(function(p){return p!==null;}).reduce(function(a,b){return a+b;},0); }
-function currentCapital() { return INIT_CAPITAL ? INIT_CAPITAL + totalPnl() : null; }
-function fmt(n, d) { d = d||2; if (n===null||n===undefined||isNaN(n)) return '-'; return (n>=0?'+':'')+n.toFixed(d); }
-function fmtAbs(n, d) { d = d||2; if (n===null||n===undefined||isNaN(n)) return '-'; return n.toFixed(d); }
 
-// === Render ===
-function renderAll() { renderCapital(); renderSummary(); renderList(); }
+function totalPnl() {
+  return trades.map(calcPnl).filter(function(p) { return p !== null; }).reduce(function(a, b) { return a + b; }, 0);
+}
+
+function currentCapital() {
+  return INIT_CAPITAL ? INIT_CAPITAL + totalPnl() : null;
+}
+
+function fmt(n, d) {
+  d = d || 2;
+  if (n === null || n === undefined || isNaN(n)) { return '-'; }
+  return (n >= 0 ? '+' : '') + n.toFixed(d);
+}
+
+function fmtAbs(n, d) {
+  d = d || 2;
+  if (n === null || n === undefined || isNaN(n)) { return '-'; }
+  return n.toFixed(d);
+}
+
+function renderAll() {
+  renderCapital();
+  renderSummary();
+  renderList();
+}
 
 function renderCapital() {
   var cap = currentCapital(), pnl = totalPnl();
@@ -377,26 +390,39 @@ function renderCapital() {
     return;
   }
   var pctClass = pct > 0 ? 'profit' : pct < 0 ? 'loss' : 'zero';
-  document.getElementById('capital-section').innerHTML = '<div class="capital-card"><div class="capital-label">目前本金</div><div class="capital-row"><div class="capital-value">' + (cap !== null ? cap.toFixed(2) : '-') + ' <span style="font-size:14px;font-weight:400;color:#aaa">USDT</span></div><div class="capital-pct ' + pctClass + '">' + fmt(pct, 2) + '%</div></div><div class="capital-sub"><span>初始 ' + INIT_CAPITAL.toFixed(2) + '</span><span>累計損益 <b style="color:' + (pnl >= 0 ? '#4ade80' : '#f87171') + '">' + fmt(pnl) + '</b> USDT</span></div></div>';
+  document.getElementById('capital-section').innerHTML =
+    '<div class="capital-card">' +
+    '<div class="capital-label">目前本金</div>' +
+    '<div class="capital-row">' +
+    '<div class="capital-value">' + (cap !== null ? cap.toFixed(2) : '-') + ' <span style="font-size:14px;font-weight:400;color:#aaa">USDT</span></div>' +
+    '<div class="capital-pct ' + pctClass + '">' + fmt(pct, 2) + '%</div>' +
+    '</div>' +
+    '<div class="capital-sub">' +
+    '<span>初始 ' + INIT_CAPITAL.toFixed(2) + '</span>' +
+    '<span>累計損益 <b style="color:' + (pnl >= 0 ? '#4ade80' : '#f87171') + '">' + fmt(pnl) + '</b> USDT</span>' +
+    '</div></div>';
 }
 
 function renderSummary() {
-  var pnls = trades.map(calcPnl).filter(function(p){return p!==null;});
-  var total = pnls.reduce(function(a,b){return a+b;},0);
-  var wins = pnls.filter(function(p){return p>0;}).length;
+  var pnls = trades.map(calcPnl).filter(function(p) { return p !== null; });
+  var total = pnls.reduce(function(a, b) { return a + b; }, 0);
+  var wins = pnls.filter(function(p) { return p > 0; }).length;
   var rate = pnls.length ? Math.round(wins / pnls.length * 100) : 0;
-  var avgW = wins ? pnls.filter(function(p){return p>0;}).reduce(function(a,b){return a+b;},0)/wins : 0;
-  var lossCnt = pnls.filter(function(p){return p<0;}).length;
-  var avgL = lossCnt ? Math.abs(pnls.filter(function(p){return p<0;}).reduce(function(a,b){return a+b;},0)/lossCnt) : 0;
-  var rr = avgL ? (avgW/avgL).toFixed(2) : '-';
-  var totalFees = trades.filter(function(t){return t.entry&&t.exit&&t.size;}).reduce(function(acc,t){return acc+feeAmt(t.entry,t.exit,t.size,t.fee||0.05);},0);
+  var avgW = wins ? pnls.filter(function(p) { return p > 0; }).reduce(function(a, b) { return a + b; }, 0) / wins : 0;
+  var lossCnt = pnls.filter(function(p) { return p < 0; }).length;
+  var avgL = lossCnt ? Math.abs(pnls.filter(function(p) { return p < 0; }).reduce(function(a, b) { return a + b; }, 0) / lossCnt) : 0;
+  var rr = avgL ? (avgW / avgL).toFixed(2) : '-';
+  var closedTrades = trades.filter(function(t) { return t.entry && t.exit && t.size; });
+  var totalFees = closedTrades.reduce(function(acc, t) { return acc + feeAmt(t.entry, t.exit, t.size, t.fee || 0.05); }, 0);
   document.getElementById('summary-stats').innerHTML =
-    '<div class="stat-card"><div class="stat-label">累計損益 (USDT)</div><div class="stat-value ' + (total>=0?'profit':'loss') + '">' + fmt(total) + '</div></div>' +
-    '<div class="stat-card"><div class="stat-label">勝率 / 次數</div><div class="stat-value ' + (rate>=50?'profit':'loss') + '">' + rate + '% <span style="font-size:12px;color:#999">' + pnls.length + '筆</span></div></div>' +
+    '<div class="stat-card"><div class="stat-label">累計損益 (USDT)</div><div class="stat-value ' + (total >= 0 ? 'profit' : 'loss') + '">' + fmt(total) + '</div></div>' +
+    '<div class="stat-card"><div class="stat-label">勝率 / 次數</div><div class="stat-value ' + (rate >= 50 ? 'profit' : 'loss') + '">' + rate + '% <span style="font-size:12px;color:#999">' + pnls.length + '筆</span></div></div>' +
     '<div class="stat-card"><div class="stat-label">實際 RR</div><div class="stat-value">' + rr + '</div></div>' +
-    '<div class="stat-card" style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center"><div><div class="stat-label">總手續費支出</div><div class="stat-value loss">-' + totalFees.toFixed(4) + ' USDT</div></div>' +
-    (INIT_CAPITAL ? '<div style="text-align:right"><div class="stat-label">佔初始本金</div><div style="font-size:15px;font-weight:500;color:#f59e0b">' + (totalFees/INIT_CAPITAL*100).toFixed(3) + '%</div></div>' : '') +
-    '<div style="text-align:right"><div class="stat-label">平均每筆手續費</div><div style="font-size:15px;font-weight:500;color:#999">' + (trades.filter(function(t){return t.entry&&t.exit&&t.size;}).length ? '-'+(totalFees/trades.filter(function(t){return t.entry&&t.exit&&t.size;}).length).toFixed(4)+' USDT' : '-') + '</div></div></div>';
+    '<div class="stat-card" style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center">' +
+    '<div><div class="stat-label">總手續費支出</div><div class="stat-value loss">-' + totalFees.toFixed(4) + ' USDT</div></div>' +
+    (INIT_CAPITAL ? '<div style="text-align:right"><div class="stat-label">佔初始本金</div><div style="font-size:15px;font-weight:500;color:#f59e0b">' + (totalFees / INIT_CAPITAL * 100).toFixed(3) + '%</div></div>' : '') +
+    '<div style="text-align:right"><div class="stat-label">平均每筆手續費</div><div style="font-size:15px;font-weight:500;color:#999">' + (closedTrades.length ? '-' + (totalFees / closedTrades.length).toFixed(4) + ' USDT' : '-') + '</div></div>' +
+    '</div>';
 }
 
 function renderList() {
@@ -408,7 +434,7 @@ function renderList() {
   var running = INIT_CAPITAL || 0;
   var withCap = trades.map(function(t) {
     var pnl = calcPnl(t), capBefore = running;
-    if (pnl !== null) running += pnl;
+    if (pnl !== null) { running += pnl; }
     return Object.assign({}, t, { pnl: pnl, capAfter: INIT_CAPITAL ? running : null, capBefore: INIT_CAPITAL ? capBefore : null });
   });
   el.innerHTML = withCap.slice().reverse().map(function(t) {
@@ -416,11 +442,15 @@ function renderList() {
     var pctOfCap = (t.pnl !== null && t.capBefore) ? (t.pnl / t.capBefore * 100) : null;
     var exp = calcExpected(t), risk = calcMaxRisk(t), rr = calcRR(t);
     var imgs = [t.img0, t.img1, t.img2];
-    var hasImgs = imgs.some(function(i){return !!i;});
+    var hasImgs = imgs.some(function(i) { return !!i; });
     var pnlCompare = (t.pnl !== null || exp !== null) ?
       '<div class="pnl-compare">' +
-      '<div class="pnl-box"><div class="pnl-box-label">實際盈虧</div><div class="pnl-box-val ' + (t.pnl===null?'':t.pnl>=0?'profit':'loss') + '">' + (t.pnl!==null?fmt(t.pnl)+' USDT':'-') + '</div>' + (pctOfCap!==null?'<div class="pnl-box-sub">'+fmt(pctOfCap,2)+'% 本金</div>':'') + '</div>' +
-      '<div class="pnl-box"><div class="pnl-box-label">預期盈虧（止盈）</div><div class="pnl-box-val ' + (exp===null?'':exp>=0?'profit':'loss') + '">' + (exp!==null?fmt(exp)+' USDT':'-') + '</div>' + (rr!==null?'<div class="pnl-box-sub">預期 RR '+rr.toFixed(2)+'</div>':'') + '</div>' +
+      '<div class="pnl-box"><div class="pnl-box-label">實際盈虧</div>' +
+      '<div class="pnl-box-val ' + (t.pnl === null ? '' : t.pnl >= 0 ? 'profit' : 'loss') + '">' + (t.pnl !== null ? fmt(t.pnl) + ' USDT' : '-') + '</div>' +
+      (pctOfCap !== null ? '<div class="pnl-box-sub">' + fmt(pctOfCap, 2) + '% 本金</div>' : '') + '</div>' +
+      '<div class="pnl-box"><div class="pnl-box-label">預期盈虧（止盈）</div>' +
+      '<div class="pnl-box-val ' + (exp === null ? '' : exp >= 0 ? 'profit' : 'loss') + '">' + (exp !== null ? fmt(exp) + ' USDT' : '-') + '</div>' +
+      (rr !== null ? '<div class="pnl-box-sub">預期 RR ' + rr.toFixed(2) + '</div>' : '') + '</div>' +
       '</div>' : '';
     var sltp = (t.sl || t.tp) ?
       '<div class="trade-meta" style="margin-top:6px">' +
@@ -435,9 +465,13 @@ function renderList() {
           (img ? '<img src="' + img + '">' : '<div class="img-slot-empty">' + IMG_ICONS[i] + '</div>') + '</div>';
       }).join('') + '</div>' : '';
     return '<div class="trade-card" onclick="openModal(\'' + t.id + '\')">' +
-      '<div class="trade-header"><div><span class="trade-symbol">' + (t.symbol||'-') + '</span><span class="badge badge-' + dir + '" style="margin-left:8px">' + t.direction + '</span><span class="badge badge-market" style="margin-left:4px">' + t.market + '</span></div>' +
-      '<div style="text-align:right"><div style="font-size:11px;color:#bbb">' + (t.date||'') + '</div></div></div>' +
-      '<div class="trade-meta"><span>進 ' + (t.entry||'-') + ' → 出 ' + (t.exit||'-') + '</span><span>倉位 ' + (t.size||'-') + ' USDT</span><span>' + (t.method||'') + '</span></div>' +
+      '<div class="trade-header"><div>' +
+      '<span class="trade-symbol">' + (t.symbol || '-') + '</span>' +
+      '<span class="badge badge-' + dir + '" style="margin-left:8px">' + t.direction + '</span>' +
+      '<span class="badge badge-market" style="margin-left:4px">' + t.market + '</span></div>' +
+      '<div style="text-align:right"><div style="font-size:11px;color:#bbb">' + (t.date || '') + '</div></div></div>' +
+      '<div class="trade-meta"><span>進 ' + (t.entry || '-') + ' → 出 ' + (t.exit || '-') + '</span>' +
+      '<span>倉位 ' + (t.size || '-') + ' USDT</span><span>' + (t.method || '') + '</span></div>' +
       sltp + pnlCompare +
       (t.capAfter !== null ? '<div style="font-size:11px;color:#bbb;margin-top:8px">交易後本金：' + t.capAfter.toFixed(2) + ' USDT</div>' : '') +
       (t.note ? '<div class="note-preview" style="margin-top:6px">' + t.note + '</div>' : '') +
@@ -446,36 +480,68 @@ function renderList() {
 }
 
 function renderStats() {
-  var pnlTrades = trades.map(function(t){return Object.assign({},t,{pnl:calcPnl(t)});}).filter(function(t){return t.pnl!==null;});
-  if (!pnlTrades.length) { document.getElementById('stats-content').innerHTML='<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-text">尚無足夠資料</div></div>'; return; }
+  var pnlTrades = trades.map(function(t) { return Object.assign({}, t, { pnl: calcPnl(t) }); }).filter(function(t) { return t.pnl !== null; });
+  if (!pnlTrades.length) {
+    document.getElementById('stats-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-text">尚無足夠資料</div></div>';
+    return;
+  }
   var eq = INIT_CAPITAL || 0;
-  var eqPoints = pnlTrades.map(function(t){eq+=t.pnl;return eq;});
-  var eqMin = Math.min.apply(null, [INIT_CAPITAL||eqPoints[0]].concat(eqPoints));
-  var eqMax = Math.max.apply(null, [INIT_CAPITAL||eqPoints[0]].concat(eqPoints));
+  var eqPoints = pnlTrades.map(function(t) { eq += t.pnl; return eq; });
+  var allEq = [INIT_CAPITAL || eqPoints[0]].concat(eqPoints);
+  var eqMin = allEq.reduce(function(a, b) { return Math.min(a, b); });
+  var eqMax = allEq.reduce(function(a, b) { return Math.max(a, b); });
   var range = eqMax - eqMin || 1, W = 400, H = 100, pad = 8;
-  var pts = eqPoints.map(function(v,i){return (pad+(i/(eqPoints.length-1||1))*(W-pad*2))+','+(H-pad-((v-eqMin)/range)*(H-pad*2));}).join(' ');
-  var lastColor = eqPoints[eqPoints.length-1] >= (INIT_CAPITAL||eqPoints[0]) ? '#16a34a' : '#dc2626';
-  var equityChart = eqPoints.length > 1 ? '<div class="equity-wrap"><div class="equity-title">資產曲線</div><svg class="equity-chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="'+lastColor+'" stroke-width="2" stroke-linejoin="round"/></svg><div style="display:flex;justify-content:space-between;font-size:11px;color:#999;margin-top:4px"><span>最低 '+eqMin.toFixed(0)+'</span><span>最高 '+eqMax.toFixed(0)+' USDT</span></div></div>' : '';
+  var pts = eqPoints.map(function(v, i) {
+    return (pad + (i / (eqPoints.length - 1 || 1)) * (W - pad * 2)) + ',' + (H - pad - ((v - eqMin) / range) * (H - pad * 2));
+  }).join(' ');
+  var lastColor = eqPoints[eqPoints.length - 1] >= (INIT_CAPITAL || eqPoints[0]) ? '#16a34a' : '#dc2626';
+  var equityChart = eqPoints.length > 1 ?
+    '<div class="equity-wrap"><div class="equity-title">資產曲線</div>' +
+    '<svg class="equity-chart" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
+    '<polyline points="' + pts + '" fill="none" stroke="' + lastColor + '" stroke-width="2" stroke-linejoin="round"/></svg>' +
+    '<div style="display:flex;justify-content:space-between;font-size:11px;color:#999;margin-top:4px"><span>最低 ' + eqMin.toFixed(0) + '</span><span>最高 ' + eqMax.toFixed(0) + ' USDT</span></div></div>' : '';
   var byMarket = {};
-  pnlTrades.forEach(function(t){if(!byMarket[t.market])byMarket[t.market]={total:0,count:0,wins:0};byMarket[t.market].total+=t.pnl;byMarket[t.market].count++;if(t.pnl>0)byMarket[t.market].wins++;});
-  var marketRows = Object.keys(byMarket).map(function(m){var d=byMarket[m];return '<div class="trade-card" style="margin-bottom:10px"><div class="trade-header"><div class="trade-symbol">'+m+'</div><div class="trade-pnl '+(d.total>=0?'profit':'loss')+'">'+fmt(d.total)+' USDT</div></div><div class="trade-meta"><span>'+d.count+' 筆</span><span>勝率 '+Math.round(d.wins/d.count*100)+'%</span></div></div>';}).join('');
+  pnlTrades.forEach(function(t) {
+    if (!byMarket[t.market]) { byMarket[t.market] = { total: 0, count: 0, wins: 0 }; }
+    byMarket[t.market].total += t.pnl;
+    byMarket[t.market].count++;
+    if (t.pnl > 0) { byMarket[t.market].wins++; }
+  });
+  var marketRows = Object.keys(byMarket).map(function(m) {
+    var d = byMarket[m];
+    return '<div class="trade-card" style="margin-bottom:10px"><div class="trade-header"><div class="trade-symbol">' + m + '</div><div class="' + (d.total >= 0 ? 'profit' : 'loss') + '">' + fmt(d.total) + ' USDT</div></div><div class="trade-meta"><span>' + d.count + ' 筆</span><span>勝率 ' + Math.round(d.wins / d.count * 100) + '%</span></div></div>';
+  }).join('');
   var bySym = {};
-  pnlTrades.forEach(function(t){if(!bySym[t.symbol])bySym[t.symbol]={total:0,count:0};bySym[t.symbol].total+=t.pnl;bySym[t.symbol].count++;});
-  var topSym = Object.keys(bySym).map(function(k){return [k,bySym[k]];}).sort(function(a,b){return Math.abs(b[1].total)-Math.abs(a[1].total);}).slice(0,6);
-  var maxAbs = Math.max.apply(null, topSym.map(function(s){return Math.abs(s[1].total);}));
-  var bars = topSym.map(function(s){var sym=s[0],d=s[1];var w=maxAbs?Math.round(Math.abs(d.total)/maxAbs*100):0;return '<div class="bar-row"><div class="bar-label">'+sym+'</div><div class="bar-track"><div class="bar-fill '+(d.total>=0?'profit':'loss')+'" style="width:'+w+'%">'+fmt(d.total)+'</div></div></div>';}).join('');
-  document.getElementById('stats-content').innerHTML = equityChart + '<div style="font-size:13px;font-weight:500;color:#666;margin-bottom:10px">依市場分類</div>' + marketRows + '<div style="font-size:13px;font-weight:500;color:#666;margin:16px 0 10px">幣種 / 股票損益</div><div class="trade-card">' + bars + '</div>';
+  pnlTrades.forEach(function(t) {
+    if (!bySym[t.symbol]) { bySym[t.symbol] = { total: 0, count: 0 }; }
+    bySym[t.symbol].total += t.pnl;
+    bySym[t.symbol].count++;
+  });
+  var topSym = Object.keys(bySym).map(function(k) { return [k, bySym[k]]; }).sort(function(a, b) { return Math.abs(b[1].total) - Math.abs(a[1].total); }).slice(0, 6);
+  var maxAbs = topSym.reduce(function(m, s) { return Math.max(m, Math.abs(s[1].total)); }, 0);
+  var bars = topSym.map(function(s) {
+    var sym = s[0], d = s[1];
+    var w = maxAbs ? Math.round(Math.abs(d.total) / maxAbs * 100) : 0;
+    return '<div class="bar-row"><div class="bar-label">' + sym + '</div><div class="bar-track"><div class="bar-fill ' + (d.total >= 0 ? 'profit' : 'loss') + '" style="width:' + w + '%">' + fmt(d.total) + '</div></div></div>';
+  }).join('');
+  document.getElementById('stats-content').innerHTML =
+    equityChart +
+    '<div style="font-size:13px;font-weight:500;color:#666;margin-bottom:10px">依市場分類</div>' +
+    marketRows +
+    '<div style="font-size:13px;font-weight:500;color:#666;margin:16px 0 10px">幣種 / 股票損益</div>' +
+    '<div class="trade-card">' + bars + '</div>';
 }
 
-// === Tab ===
 function switchTab(tab) {
-  ['list','stats','setup'].forEach(function(t){document.getElementById(t+'-view').style.display=t===tab?'':'none';});
-  document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',['list','stats','setup'][i]===tab);});
-  if (tab === 'stats') renderStats();
-  if (tab === 'setup') { document.getElementById('api-url-input').value=API_URL; document.getElementById('init-capital-input').value=INIT_CAPITAL||''; }
+  ['list', 'stats', 'setup'].forEach(function(t) { document.getElementById(t + '-view').style.display = t === tab ? '' : 'none'; });
+  document.querySelectorAll('.tab').forEach(function(el, i) { el.classList.toggle('active', ['list', 'stats', 'setup'][i] === tab); });
+  if (tab === 'stats') { renderStats(); }
+  if (tab === 'setup') {
+    document.getElementById('api-url-input').value = API_URL;
+    document.getElementById('init-capital-input').value = INIT_CAPITAL || '';
+  }
 }
 
-// === Modal ===
 function openModal(id) {
   editingId = id || null;
   imgData = [null, null, null];
@@ -483,8 +549,8 @@ function openModal(id) {
   document.getElementById('delete-btn').style.display = id ? '' : 'none';
   resetSlots();
   if (id) {
-    var t = trades.filter(function(x){return x.id == id;})[0];
-    if (!t) return;
+    var t = trades.filter(function(x) { return x.id == id; })[0];
+    if (!t) { return; }
     document.getElementById('f-symbol').value = t.symbol || '';
     document.getElementById('f-market').value = t.market || '加密貨幣';
     document.getElementById('f-direction').value = t.direction || '做多';
@@ -492,22 +558,19 @@ function openModal(id) {
     document.getElementById('f-exit').value = t.exit || '';
     document.getElementById('f-size').value = t.size || '';
     document.getElementById('f-fee').value = t.fee || 0.05;
-    // 計算買入數量
-    if (t.entry && t.size) {
-      document.getElementById('f-qty').value = (t.size / t.entry).toFixed(6);
-    } else {
-      document.getElementById('f-qty').value = '';
-    }
     document.getElementById('f-sl').value = t.sl || '';
     document.getElementById('f-tp').value = t.tp || '';
     document.getElementById('f-method').value = t.method || '市價單';
     document.getElementById('f-date').value = t.date || '';
     document.getElementById('f-note').value = t.note || '';
-    [t.img0, t.img1, t.img2].forEach(function(img, i) {
-      if (img) { imgData[i] = img; renderSlot(i, img); }
-    });
+    if (t.entry && t.size) {
+      document.getElementById('f-qty').value = (t.size / t.entry).toFixed(6);
+    } else {
+      document.getElementById('f-qty').value = '';
+    }
+    [t.img0, t.img1, t.img2].forEach(function(img, i) { if (img) { imgData[i] = img; renderSlot(i, img); } });
   } else {
-    ['f-symbol','f-entry','f-exit','f-size','f-qty','f-sl','f-tp','f-note'].forEach(function(id){document.getElementById(id).value='';});
+    ['f-symbol', 'f-entry', 'f-exit', 'f-size', 'f-qty', 'f-sl', 'f-tp', 'f-note'].forEach(function(fid) { document.getElementById(fid).value = ''; });
     document.getElementById('f-fee').value = 0.05;
     document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('f-market').value = '加密貨幣';
@@ -517,10 +580,13 @@ function openModal(id) {
   updatePnlPreview();
   document.getElementById('modal').classList.add('open');
 }
+
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
 function triggerUpload(i) { document.getElementById('f-img-' + i).click(); }
-function resetSlots() { [0,1,2].forEach(function(i){renderSlot(i,null);}); }
+
+function resetSlots() { [0, 1, 2].forEach(function(i) { renderSlot(i, null); }); }
+
 function renderSlot(i, src) {
   var slot = document.getElementById('slot-' + i);
   if (src) {
@@ -529,10 +595,12 @@ function renderSlot(i, src) {
     slot.innerHTML = '<div class="slot-icon">' + IMG_ICONS[i] + '</div><div>' + IMG_LABELS[i] + '</div>';
   }
 }
+
 function removeImg(e, i) { e.stopPropagation(); imgData[i] = null; renderSlot(i, null); }
 
 function previewImg(e, i) {
-  var file = e.target.files[0]; if (!file) return;
+  var file = e.target.files[0];
+  if (!file) { return; }
   var canvas = document.createElement('canvas'), img = new Image(), reader = new FileReader();
   reader.onload = function(ev) {
     img.onload = function() {
@@ -540,7 +608,6 @@ function previewImg(e, i) {
       if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      // 統一輸出 jpeg，不管原始格式
       imgData[i] = canvas.toDataURL('image/jpeg', 0.8);
       renderSlot(i, imgData[i]);
     };
@@ -571,7 +638,7 @@ function onQtyInput() {
   updatePnlPreview();
 }
 
-
+function updatePnlPreview() {
   var entry = parseFloat(document.getElementById('f-entry').value);
   var exit = parseFloat(document.getElementById('f-exit').value);
   var sl = parseFloat(document.getElementById('f-sl').value);
@@ -580,44 +647,46 @@ function onQtyInput() {
   var fee = parseFloat(document.getElementById('f-fee').value) || 0.05;
   var dir = document.getElementById('f-direction').value;
   var preview = document.getElementById('pnl-preview');
-  if (!entry || !size) { preview.style.display = 'none'; return; }
-  var mock = { entry: entry, exit: exit||null, sl: sl||null, tp: tp||null, size: size, fee: fee, direction: dir };
-  var actualPnl = calcPnl(mock);
-  var cap = currentCapital() || INIT_CAPITAL;
-  var actualPct = (actualPnl !== null && cap) ? (actualPnl / cap * 100) : null;
-  document.getElementById('prev-actual').textContent = actualPnl !== null ? fmt(actualPnl) + ' USDT' : '（尚未出場）';
-  document.getElementById('prev-actual').style.color = actualPnl === null ? '#999' : actualPnl >= 0 ? '#16a34a' : '#dc2626';
-  document.getElementById('prev-actual-pct').textContent = actualPct !== null ? '佔本金 ' + fmt(actualPct, 2) + '%' : '';
-  var expPnl = calcExpected(mock), risk = calcMaxRisk(mock);
-  var rr = (expPnl && risk && risk !== 0) ? (expPnl / risk) : null;
-  document.getElementById('prev-tp').textContent = expPnl !== null ? fmt(expPnl) + ' USDT' : '-';
-  document.getElementById('prev-tp').style.color = expPnl !== null ? (expPnl >= 0 ? '#16a34a' : '#dc2626') : '#999';
-  document.getElementById('prev-sl').textContent = risk !== null ? '-' + risk.toFixed(2) + ' USDT' : '-';
-  document.getElementById('prev-sl').style.color = '#dc2626';
-  document.getElementById('prev-rr').textContent = rr !== null ? '1 : ' + rr.toFixed(2) : '-';
-  document.getElementById('prev-fee').textContent = exit ? '-' + feeAmt(entry, exit, size, fee/100 * 100).toFixed(4) + ' USDT' : '-';
-  preview.style.display = '';
+  if (!entry || !size) {
+    preview.style.display = 'none';
+  } else {
+    var mock = { entry: entry, exit: exit || null, sl: sl || null, tp: tp || null, size: size, fee: fee, direction: dir };
+    var actualPnl = calcPnl(mock);
+    var cap = currentCapital() || INIT_CAPITAL;
+    var actualPct = (actualPnl !== null && cap) ? (actualPnl / cap * 100) : null;
+    document.getElementById('prev-actual').textContent = actualPnl !== null ? fmt(actualPnl) + ' USDT' : '（尚未出場）';
+    document.getElementById('prev-actual').style.color = actualPnl === null ? '#999' : actualPnl >= 0 ? '#16a34a' : '#dc2626';
+    document.getElementById('prev-actual-pct').textContent = actualPct !== null ? '佔本金 ' + fmt(actualPct, 2) + '%' : '';
+    var expPnl = calcExpected(mock), risk = calcMaxRisk(mock);
+    var rr = (expPnl && risk && risk !== 0) ? (expPnl / risk) : null;
+    document.getElementById('prev-tp').textContent = expPnl !== null ? fmt(expPnl) + ' USDT' : '-';
+    document.getElementById('prev-tp').style.color = expPnl !== null ? (expPnl >= 0 ? '#16a34a' : '#dc2626') : '#999';
+    document.getElementById('prev-sl').textContent = risk !== null ? '-' + risk.toFixed(2) + ' USDT' : '-';
+    document.getElementById('prev-sl').style.color = '#dc2626';
+    document.getElementById('prev-rr').textContent = rr !== null ? '1 : ' + rr.toFixed(2) : '-';
+    document.getElementById('prev-fee').textContent = exit ? '-' + feeAmt(entry, exit, size, fee).toFixed(4) + ' USDT' : '-';
+    preview.style.display = '';
+  }
 }
 
-['f-entry','f-exit','f-size','f-fee','f-sl','f-tp','f-direction'].forEach(function(id) {
-  var el = document.getElementById(id);
-  el.addEventListener('input', function() {
-    if (id === 'f-entry') {
-      // 進場價改變時，優先用數量重算金額
-      var qty = parseFloat(document.getElementById('f-qty').value);
-      var entry = parseFloat(document.getElementById('f-entry').value);
-      if (qty && entry) document.getElementById('f-size').value = (qty * entry).toFixed(2);
-    }
-    updatePnlPreview();
-  });
-  el.addEventListener('change', updatePnlPreview);
+document.getElementById('f-entry').addEventListener('input', function() {
+  var qty = parseFloat(document.getElementById('f-qty').value);
+  var entry = parseFloat(document.getElementById('f-entry').value);
+  if (qty && entry) { document.getElementById('f-size').value = (qty * entry).toFixed(2); }
+  updatePnlPreview();
 });
+document.getElementById('f-size').addEventListener('input', onSizeInput);
+document.getElementById('f-qty').addEventListener('input', onQtyInput);
+document.getElementById('f-exit').addEventListener('input', updatePnlPreview);
+document.getElementById('f-fee').addEventListener('input', updatePnlPreview);
+document.getElementById('f-sl').addEventListener('input', updatePnlPreview);
+document.getElementById('f-tp').addEventListener('input', updatePnlPreview);
+document.getElementById('f-direction').addEventListener('change', updatePnlPreview);
 
-// === Save ===
 function saveTrade() {
   var btn = document.getElementById('save-btn');
-  btn.disabled = true; btn.textContent = '儲存中...';
-
+  btn.disabled = true;
+  btn.textContent = '儲存中...';
   var t = {
     id: editingId || Date.now().toString(),
     symbol: document.getElementById('f-symbol').value.trim().toUpperCase(),
@@ -634,28 +703,23 @@ function saveTrade() {
     note: document.getElementById('f-note').value.trim(),
     img0: null, img0Id: null, img1: null, img1Id: null, img2: null, img2Id: null
   };
-
-  // 保留已有的 Drive URL
   if (editingId) {
-    var existing = trades.filter(function(x){return x.id == editingId;})[0];
+    var existing = trades.filter(function(x) { return x.id == editingId; })[0];
     if (existing) {
-      [0,1,2].forEach(function(i) {
+      [0, 1, 2].forEach(function(i) {
         if (imgData[i] && imgData[i].indexOf('http') === 0) {
-          t['img'+i] = existing['img'+i];
-          t['img'+i+'Id'] = existing['img'+i+'Id'];
+          t['img' + i] = existing['img' + i];
+          t['img' + i + 'Id'] = existing['img' + i + 'Id'];
         }
       });
     }
   }
-
-  // 上傳新圖片（base64）
-  var pending = [0,1,2].filter(function(i){ return imgData[i] && imgData[i].indexOf('data:') === 0; });
+  var pending = [0, 1, 2].filter(function(i) { return imgData[i] && imgData[i].indexOf('data:') === 0; });
   var uploaded = 0;
-
   function onAllUploaded() {
     if (editingId) {
-      var idx = trades.map(function(x){return x.id;}).indexOf(editingId);
-      if (idx >= 0) trades[idx] = t;
+      var idx = trades.map(function(x) { return x.id; }).indexOf(editingId);
+      if (idx >= 0) { trades[idx] = t; }
     } else {
       trades.push(t);
     }
@@ -666,30 +730,32 @@ function saveTrade() {
         setSyncStatus(res && res.ok ? 'ok' : 'error');
       });
     }
-    btn.disabled = false; btn.textContent = '儲存紀錄';
-    closeModal(); renderAll();
+    btn.disabled = false;
+    btn.textContent = '儲存紀錄';
+    closeModal();
+    renderAll();
   }
-
   if (pending.length === 0) {
     onAllUploaded();
   } else {
     pending.forEach(function(i) {
       btn.textContent = '上傳圖片...';
       uploadImgToDrive(imgData[i], i, function(result) {
-        if (result) { t['img'+i] = result.url; t['img'+i+'Id'] = result.fileId; }
+        if (result) { t['img' + i] = result.url; t['img' + i + 'Id'] = result.fileId; }
         uploaded++;
-        if (uploaded === pending.length) onAllUploaded();
+        if (uploaded === pending.length) { onAllUploaded(); }
       });
     });
   }
 }
 
 function deleteTrade() {
-  if (!editingId || !confirm('確定刪除這筆紀錄？')) return;
+  if (!editingId || !confirm('確定刪除這筆紀錄？')) { return; }
   var idToDelete = editingId;
-  trades = trades.filter(function(t){return t.id != idToDelete;});
+  trades = trades.filter(function(t) { return t.id != idToDelete; });
   localStorage.setItem('trades', JSON.stringify(trades));
-  closeModal(); renderAll();
+  closeModal();
+  renderAll();
   if (API_URL) {
     apiFetch({ action: 'delete', id: idToDelete }, function(res) {
       setSyncStatus(res && res.ok ? 'ok' : 'error');
@@ -701,23 +767,35 @@ function saveCapital() {
   var v = parseFloat(document.getElementById('init-capital-input').value);
   var el = document.getElementById('capital-result');
   if (!v || v <= 0) { el.style.color = '#dc2626'; el.textContent = '請輸入有效的本金數值'; return; }
-  INIT_CAPITAL = v; localStorage.setItem('init_capital', v);
-  el.style.color = '#16a34a'; el.textContent = '✅ 已設定初始本金：' + v.toFixed(2) + ' USDT';
+  INIT_CAPITAL = v;
+  localStorage.setItem('init_capital', v);
+  el.style.color = '#16a34a';
+  el.textContent = '✅ 已設定初始本金：' + v.toFixed(2) + ' USDT';
   renderAll();
 }
 
 function saveApiUrl() {
   var url = document.getElementById('api-url-input').value.trim();
   var el = document.getElementById('conn-result');
-  if (!url) return;
-  el.textContent = '測試中...'; el.style.color = '#999';
-  fetch(url + '?action=getAll').then(function(r){return r.json();}).then(function(data) {
+  if (!url) { return; }
+  el.textContent = '測試中...';
+  el.style.color = '#999';
+  fetch(url + '?action=getAll').then(function(r) { return r.json(); }).then(function(data) {
     if (data && Array.isArray(data.trades)) {
-      API_URL = url; localStorage.setItem('api_url', url);
-      el.style.color = '#16a34a'; el.textContent = '✅ 連線成功！';
-      trades = parseTrades(data.trades); setSyncStatus('ok'); renderAll();
-    } else { throw new Error(); }
-  }).catch(function() { el.style.color = '#dc2626'; el.textContent = '❌ 連線失敗，請確認網址與存取權設定。'; });
+      API_URL = url;
+      localStorage.setItem('api_url', url);
+      el.style.color = '#16a34a';
+      el.textContent = '✅ 連線成功！';
+      trades = parseTrades(data.trades);
+      setSyncStatus('ok');
+      renderAll();
+    } else {
+      throw new Error();
+    }
+  }).catch(function() {
+    el.style.color = '#dc2626';
+    el.textContent = '❌ 連線失敗，請確認網址與存取權設定。';
+  });
 }
 
 loadTrades();

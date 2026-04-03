@@ -310,8 +310,26 @@ let INIT_CAPITAL = parseFloat(localStorage.getItem('init_capital')) || 0;
 const IMG_LABELS = ['入場理由','開單截圖','關單截圖'];
 const IMG_ICONS = ['📋','📈','📉'];
 
+// === 上傳圖片到 Google Drive ===
+async function uploadImgToDrive(base64DataUrl, slot) {
+  if (!API_URL || !base64DataUrl) return null;
+  try {
+    // 拆出 mimeType 和 base64
+    const match = base64DataUrl.match(/^data:(.+);base64,(.+)$/);
+    if (!match) return null;
+    const mimeType = match[1];
+    const base64 = match[2];
+    const filename = `trade_${Date.now()}_${slot}.jpg`;
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'uploadImg', filename, base64, mimeType }),
+      headers: { 'Content-Type': 'text/plain' }
+    });
+    const data = await res.json();
+    return data.ok ? { url: data.url, fileId: data.fileId } : null;
+  } catch(e) { return null; }
+}
 // === API ===
-async function apiFetch(params) {
   if (!API_URL) return null;
   try {
     const action = params.action;
@@ -340,7 +358,22 @@ async function loadTrades() {
   setSyncStatus('syncing');
   const data = await apiGet();
   if (data && data.trades) {
-    trades = parseTrades(data.trades);
+    const remoteTrades = parseTrades(data.trades);
+    // 從本機撈圖片，補回雲端資料
+    const localTrades = parseTrades(JSON.parse(localStorage.getItem('trades') || '[]'));
+    const localMap = {};
+    localTrades.forEach(t => localMap[t.id] = t);
+    trades = remoteTrades.map(t => {
+      const local = localMap[t.id];
+      if (local) {
+        t.img0 = local.img0 || null;
+        t.img1 = local.img1 || null;
+        t.img2 = local.img2 || null;
+      }
+      return t;
+    });
+    // 同步更新本機（保留圖片）
+    localStorage.setItem('trades', JSON.stringify(trades));
     setSyncStatus('ok');
   } else {
     trades = parseTrades(JSON.parse(localStorage.getItem('trades') || '[]'));
@@ -718,29 +751,59 @@ function updatePnlPreview() {
 });
 
 async function saveTrade() {
-  const btn=document.getElementById('save-btn');
-  btn.disabled=true; btn.textContent='儲存中...';
-  const t={
-    id: editingId||Date.now().toString(),
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; btn.textContent = '儲存中...';
+
+  // 先上傳有變動的圖片到 Drive
+  const imgResults = [null, null, null];
+  for (let i = 0; i < 3; i++) {
+    if (imgData[i] && imgData[i].startsWith('data:')) {
+      // 新圖片（base64），上傳到 Drive
+      btn.textContent = `上傳圖片 ${i+1}/3...`;
+      const result = await uploadImgToDrive(imgData[i], i);
+      if (result) {
+        imgResults[i] = result; // { url, fileId }
+      }
+    } else if (imgData[i] && imgData[i].startsWith('http')) {
+      // 已是 Drive URL，保持不變（編輯時）
+      const t = editingId ? trades.find(x => x.id == editingId) : null;
+      imgResults[i] = t ? { url: t[`img${i}`], fileId: t[`img${i}Id`] } : null;
+    }
+  }
+
+  const t = {
+    id: editingId || Date.now().toString(),
     symbol: document.getElementById('f-symbol').value.trim().toUpperCase(),
     market: document.getElementById('f-market').value,
     direction: document.getElementById('f-direction').value,
-    entry: parseFloat(document.getElementById('f-entry').value)||null,
-    exit: parseFloat(document.getElementById('f-exit').value)||null,
-    size: parseFloat(document.getElementById('f-size').value)||null,
-    fee: parseFloat(document.getElementById('f-fee').value)||0.05,
-    sl: parseFloat(document.getElementById('f-sl').value)||null,
-    tp: parseFloat(document.getElementById('f-tp').value)||null,
+    entry: parseFloat(document.getElementById('f-entry').value) || null,
+    exit: parseFloat(document.getElementById('f-exit').value) || null,
+    size: parseFloat(document.getElementById('f-size').value) || null,
+    fee: parseFloat(document.getElementById('f-fee').value) || 0.05,
+    sl: parseFloat(document.getElementById('f-sl').value) || null,
+    tp: parseFloat(document.getElementById('f-tp').value) || null,
     method: document.getElementById('f-method').value,
     date: document.getElementById('f-date').value,
     note: document.getElementById('f-note').value.trim(),
-    img0: imgData[0], img1: imgData[1], img2: imgData[2]
+    img0: imgResults[0] ? imgResults[0].url : null,
+    img0Id: imgResults[0] ? imgResults[0].fileId : null,
+    img1: imgResults[1] ? imgResults[1].url : null,
+    img1Id: imgResults[1] ? imgResults[1].fileId : null,
+    img2: imgResults[2] ? imgResults[2].url : null,
+    img2Id: imgResults[2] ? imgResults[2].fileId : null,
   };
-  if(editingId){ const idx=trades.findIndex(x=>x.id==editingId); if(idx>=0) trades[idx]=t; }
+
+  if (editingId) { const idx = trades.findIndex(x => x.id == editingId); if (idx >= 0) trades[idx] = t; }
   else trades.push(t);
   localStorage.setItem('trades', JSON.stringify(trades));
-  if(API_URL){ const res=await apiFetch({action:'save',trade:t}); setSyncStatus(res&&res.ok?'ok':'error'); }
-  btn.disabled=false; btn.textContent='儲存紀錄';
+
+  if (API_URL) {
+    btn.textContent = '同步中...';
+    const res = await apiFetch({ action: 'save', trade: t });
+    setSyncStatus(res && res.ok ? 'ok' : 'error');
+  }
+
+  btn.disabled = false; btn.textContent = '儲存紀錄';
   closeModal(); renderAll();
 }
 

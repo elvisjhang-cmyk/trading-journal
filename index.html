@@ -185,8 +185,14 @@ svg.equity-chart { width: 100%; height: 120px; }
     <div class="form-row">
       <div class="form-group">
         <label>倉位金額 (USDT)</label>
-        <input type="number" id="f-size" placeholder="例：3000" step="any">
+        <input type="number" id="f-size" placeholder="例：3000" step="any" oninput="onSizeInput()">
       </div>
+      <div class="form-group">
+        <label>買入數量</label>
+        <input type="number" id="f-qty" placeholder="例：0.03" step="any" oninput="onQtyInput()">
+      </div>
+    </div>
+    <div class="form-row">
       <div class="form-group">
         <label>手續費率 (%)</label>
         <input type="number" id="f-fee" placeholder="0.05" step="0.001" value="0.05">
@@ -486,6 +492,12 @@ function openModal(id) {
     document.getElementById('f-exit').value = t.exit || '';
     document.getElementById('f-size').value = t.size || '';
     document.getElementById('f-fee').value = t.fee || 0.05;
+    // 計算買入數量
+    if (t.entry && t.size) {
+      document.getElementById('f-qty').value = (t.size / t.entry).toFixed(6);
+    } else {
+      document.getElementById('f-qty').value = '';
+    }
     document.getElementById('f-sl').value = t.sl || '';
     document.getElementById('f-tp').value = t.tp || '';
     document.getElementById('f-method').value = t.method || '市價單';
@@ -495,7 +507,7 @@ function openModal(id) {
       if (img) { imgData[i] = img; renderSlot(i, img); }
     });
   } else {
-    ['f-symbol','f-entry','f-exit','f-size','f-sl','f-tp','f-note'].forEach(function(id){document.getElementById(id).value='';});
+    ['f-symbol','f-entry','f-exit','f-size','f-qty','f-sl','f-tp','f-note'].forEach(function(id){document.getElementById(id).value='';});
     document.getElementById('f-fee').value = 0.05;
     document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('f-market').value = '加密貨幣';
@@ -537,7 +549,29 @@ function previewImg(e, i) {
   reader.readAsDataURL(file);
 }
 
-function updatePnlPreview() {
+// 雙向計算：倉位金額 ↔ 買入數量
+function onSizeInput() {
+  var size = parseFloat(document.getElementById('f-size').value);
+  var entry = parseFloat(document.getElementById('f-entry').value);
+  if (size && entry) {
+    document.getElementById('f-qty').value = (size / entry).toFixed(6);
+  } else {
+    document.getElementById('f-qty').value = '';
+  }
+  updatePnlPreview();
+}
+function onQtyInput() {
+  var qty = parseFloat(document.getElementById('f-qty').value);
+  var entry = parseFloat(document.getElementById('f-entry').value);
+  if (qty && entry) {
+    document.getElementById('f-size').value = (qty * entry).toFixed(2);
+  } else {
+    document.getElementById('f-size').value = '';
+  }
+  updatePnlPreview();
+}
+
+
   var entry = parseFloat(document.getElementById('f-entry').value);
   var exit = parseFloat(document.getElementById('f-exit').value);
   var sl = parseFloat(document.getElementById('f-sl').value);
@@ -566,8 +600,17 @@ function updatePnlPreview() {
 }
 
 ['f-entry','f-exit','f-size','f-fee','f-sl','f-tp','f-direction'].forEach(function(id) {
-  document.getElementById(id).addEventListener('input', updatePnlPreview);
-  document.getElementById(id).addEventListener('change', updatePnlPreview);
+  var el = document.getElementById(id);
+  el.addEventListener('input', function() {
+    if (id === 'f-entry') {
+      // 進場價改變時，優先用數量重算金額
+      var qty = parseFloat(document.getElementById('f-qty').value);
+      var entry = parseFloat(document.getElementById('f-entry').value);
+      if (qty && entry) document.getElementById('f-size').value = (qty * entry).toFixed(2);
+    }
+    updatePnlPreview();
+  });
+  el.addEventListener('change', updatePnlPreview);
 });
 
 // === Save ===

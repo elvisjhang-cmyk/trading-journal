@@ -314,7 +314,14 @@ const IMG_ICONS = ['📋','📈','📉'];
 async function apiFetch(params) {
   if (!API_URL) return null;
   try {
-    const res = await fetch(API_URL, { method:'POST', body:JSON.stringify(params), headers:{'Content-Type':'text/plain'} });
+    const action = params.action;
+    let url = `${API_URL}?action=${action}`;
+    if (action === 'save') {
+      url += `&trade=${encodeURIComponent(JSON.stringify(params.trade))}`;
+    } else if (action === 'delete') {
+      url += `&id=${encodeURIComponent(params.id)}`;
+    }
+    const res = await fetch(url);
     return await res.json();
   } catch(e) { return null; }
 }

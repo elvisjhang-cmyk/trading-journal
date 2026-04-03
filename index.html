@@ -734,14 +734,21 @@ function saveTrade() {
     note: document.getElementById('f-note').value.trim(),
     img0: null, img0Id: null, img1: null, img1Id: null, img2: null, img2Id: null
   };
+  // 處理圖片：有新圖(base64)就上傳，有舊URL就保留，null就清空
   if (editingId) {
     var existing = trades.filter(function(x) { return x.id == editingId; })[0];
     if (existing) {
       [0, 1, 2].forEach(function(i) {
         if (imgData[i] && imgData[i].indexOf('http') === 0) {
+          // 保留舊 URL
           t['img' + i] = existing['img' + i];
           t['img' + i + 'Id'] = existing['img' + i + 'Id'];
+        } else if (!imgData[i]) {
+          // 明確清空（使用者有移除）
+          t['img' + i] = null;
+          t['img' + i + 'Id'] = null;
         }
+        // 如果是 data: 開頭，後面的 pending 上傳邏輯會處理
       });
     }
   }

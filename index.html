@@ -203,8 +203,8 @@ svg.equity-chart { width: 100%; height: 120px; }
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>倉位大小（數量）</label>
-        <input type="number" id="f-size" placeholder="例：0.5" step="any">
+        <label>倉位金額（USDT）</label>
+        <input type="number" id="f-size" placeholder="例：3000" step="any">
       </div>
       <div class="form-group">
         <label>手續費率 (%)</label>
@@ -351,23 +351,25 @@ function setSyncStatus(s) {
 }
 
 // === Calc ===
+// 倉位金額模式：size = 投入的 USDT 金額
 function feeAmt(entry, exit, size, feeRate) {
-  return (entry*size + exit*size) * (feeRate/100);
+  // 手續費 = 倉位金額 × 費率 × 2（進出場）
+  return size * (feeRate/100) * 2;
 }
 function calcPnl(t) {
   if (!t.entry || !t.exit || !t.size) return null;
-  const diff = t.direction==='做多' ? t.exit-t.entry : t.entry-t.exit;
-  return diff*t.size - feeAmt(t.entry, t.exit, t.size, t.fee||0.05);
+  const pct = t.direction==='做多' ? (t.exit-t.entry)/t.entry : (t.entry-t.exit)/t.entry;
+  return t.size * pct - feeAmt(t.entry, t.exit, t.size, t.fee||0.05);
 }
 function calcExpected(t) {
   if (!t.entry || !t.tp || !t.size) return null;
-  const diff = t.direction==='做多' ? t.tp-t.entry : t.entry-t.tp;
-  return diff*t.size - feeAmt(t.entry, t.tp, t.size, t.fee||0.05);
+  const pct = t.direction==='做多' ? (t.tp-t.entry)/t.entry : (t.entry-t.tp)/t.entry;
+  return t.size * pct - feeAmt(t.entry, t.tp, t.size, t.fee||0.05);
 }
 function calcMaxRisk(t) {
   if (!t.entry || !t.sl || !t.size) return null;
-  const diff = t.direction==='做多' ? t.entry-t.sl : t.sl-t.entry;
-  return diff*t.size + feeAmt(t.entry, t.sl, t.size, t.fee||0.05);
+  const pct = t.direction==='做多' ? (t.entry-t.sl)/t.entry : (t.sl-t.entry)/t.entry;
+  return t.size * pct + feeAmt(t.entry, t.sl, t.size, t.fee||0.05);
 }
 function calcRR(t) {
   const exp = calcExpected(t), risk = calcMaxRisk(t);
@@ -513,7 +515,7 @@ function renderList() {
       </div>
       <div class="trade-meta">
         <span>進 ${t.entry||'-'} → 出 ${t.exit||'-'}</span>
-        <span>倉位 ${t.size||'-'}</span>
+        <span>倉位 ${t.size||'-'} USDT</span>
         <span>${t.method||''}</span>
       </div>
       ${sltp}
